@@ -5,6 +5,7 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/shared/app-sidebar";
 import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
 
 export const vazirmatn = localFont({
   src: [
@@ -86,8 +87,9 @@ export default function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <SidebarTrigger />
-            <main className="w-full flex flex-col justify-center items-center">
-              <div className="w-11/12">
+            <main className="w-full">
+              <div className="w-11/12 mx-auto">
+                <Header />
                 {children}
                 <Footer />
               </div>
