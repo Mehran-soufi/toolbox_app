@@ -1,9 +1,10 @@
-import Image from "next/image";
-import logo from "../assets/logo/logo.png";
 
-export default function Home() {
+import Hero from "@/components/home/hero";
+
+export default function HomePage() {
   return (
-    <div className="w-full ">
+    <div className="w-full">
+      <Hero />
     </div>
   );
 }

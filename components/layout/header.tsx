@@ -8,8 +8,8 @@ function Header() {
     <header className="w-full px-1 py-1.5 flex items-center justify-between">
       <div className="flex items-center gap-x-1">
         {/* Logo */}
-        <Image src={logo} alt="logo" width={50} height={50} />
-        <p>جعبه ابزار</p>
+        {/* <Image src={logo} alt="logo" width={50} height={50} />
+        <p>جعبه ابزار</p> */}
       </div>
       <div className="flex items-center">
         {/* Button */}

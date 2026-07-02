@@ -45,7 +45,7 @@ function Footer() {
     <footer
       className="w-full select-none rounded-xl py-3 px-3
     bg-transparent
-     shadow-inner shadow-sky-700"
+     shadow-inner shadow-purple-500"
     >
       <div className="w-full flex xl:flex-row flex-col items-center justify-between gap-x-8">
         {footerItem.map((item, index) => {
