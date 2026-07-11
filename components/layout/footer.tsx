@@ -43,7 +43,7 @@ const footerItem: footerItemType[] = [
 function Footer() {
   return (
     <footer
-      className="w-full select-none rounded-xl py-3 px-3
+      className="w-full select-none rounded-xl py-3 px-3 mt-2
     bg-transparent
      shadow-inner shadow-purple-500"
     >
