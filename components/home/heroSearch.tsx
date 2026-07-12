@@ -5,7 +5,7 @@ function HeroSearch() {
           <div className="w-full p-2">
           <div
             className="
-      w-11/12 p-2 py-2
+      lg:w-11/12 w-full p-2 py-2
       rounded-xl gap-x-2
       flex items-center justify-between
       isolate
@@ -20,7 +20,7 @@ function HeroSearch() {
           >
             {/* Icon */}
             <div className="flex items-center justify-center text-gray-600 dark:text-gray-300">
-              <Search />
+              <Search size={16} />
             </div>
 
             {/* Input */}
@@ -35,6 +35,7 @@ function HeroSearch() {
           outline-none
           text-gray-800 dark:text-gray-100
           placeholder:text-gray-500 dark:placeholder:text-gray-400
+          md:placeholder:text-base placeholder:text-sm
         "
               />
             </div>

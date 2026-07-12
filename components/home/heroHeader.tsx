@@ -10,8 +10,8 @@ function HeroHeader() {
           <Image src={logo} alt="logo" width={60} height={60} />
         </div>
         <div className="flex flex-col gap-y-2 relative">
-          <h1 className="text-4xl font-bold">جعبه ابزار</h1>
-          <p>خوش برگشتی! هر ابزاری که نیازی داری اینجاست✨</p>
+          <h1 className="xl:text-4xl lg:text-3xl text-2xl font-bold">جعبه ابزار</h1>
+          <p className="text-sm sm:text-base lg:text-lg">خوش برگشتی! هر ابزاری که نیازی داری اینجاست✨</p>
           {/* star shape */}
           <FloatingStar size={25} className="bottom-8 left-20" opacity={0.8} />
           <FloatingStar size={10} className="-top-2 left-30" opacity={0.4} />
