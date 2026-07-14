@@ -36,8 +36,7 @@ async function HeroWeather() {
             className="
               xl:text-3xl 
               lg:text-2xl 
-              md:text-xl 
-              text-lg 
+              text-xl 
               font-bold
             "
           >

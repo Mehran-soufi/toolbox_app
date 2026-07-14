@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "./provider/theme-provider";
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import AppSidebar from "@/components/shared/app-sidebar";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
+import BottomNav from "@/components/shared/bottom-nav";
 
 export const vazirmatn = localFont({
   src: [
@@ -82,19 +87,19 @@ export default function RootLayout({
       className={`${vazirmatn.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="max-w-full">
         <ThemeProvider>
-          <SidebarProvider>
+          <div className="flex">
             <AppSidebar />
-            <SidebarTrigger />
-            <main className="w-full">
-              <div className="w-11/12 mx-auto">
-                <Header />
+            <div className="w-full flex-1 flex flex-col min-h-screen">
+              <div className="w-11/12 mx-auto flex-1 md:pb-0">
+              <Header />
                 {children}
-                <Footer />
+              <Footer />
               </div>
-            </main>
-          </SidebarProvider>
+            </div>
+          </div>
+          <BottomNav />
         </ThemeProvider>
       </body>
     </html>

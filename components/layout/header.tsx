@@ -2,11 +2,17 @@ import ThemeToggle from "../shared/theme-toggle";
 
 import logo from "../../assets/logo/logo.png";
 import Image from "next/image";
+import { ReactNode } from "react";
 
-function Header() {
+interface HeaderProps {
+  trigger?: ReactNode;
+}
+
+function Header({ trigger }: HeaderProps)  {
   return (
     <header className="w-full px-1 py-1.5 flex items-center justify-between">
       <div className="flex items-center gap-x-1">
+         {trigger}
         {/* Logo */}
         {/* <Image src={logo} alt="logo" width={50} height={50} />
         <p>جعبه ابزار</p> */}
