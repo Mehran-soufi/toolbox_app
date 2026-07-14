@@ -7,18 +7,14 @@ import PopularToolCard from "./popular-tool-card";
 function PopularToolsSection() {
   return (
     <section className="relative overflow-hidden rounded-3xl border border-border/50 bg-background py-6">
-
       {/* Glow Background */}
       <div className="pointer-events-none absolute -top-24 left-0 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl dark:bg-purple-500/20" />
       <div className="pointer-events-none absolute -bottom-24 right-0 h-72 w-72 rounded-full bg-violet-500/10 blur-3xl dark:bg-violet-500/20" />
 
       <div className="relative px-2 md:px-6">
-
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-
-          <div className="flex items-center gap-3">
-
+        <div className="lg:mb-6 mb-4 flex items-center justify-between">
+          <div className="max-w-2/3 flex items-center gap-3">
             <div
               className="
               flex h-10 w-10 items-center justify-center
@@ -29,23 +25,20 @@ function PopularToolsSection() {
               dark:text-purple-400
             "
             >
-              <Sparkles size={20} />
+              <Sparkles size={18} />
             </div>
 
             <div>
-              <h2 className="text-lg font-bold">
-                ابزارهای محبوب
-              </h2>
+              <h2 className="md:text-lg font-bold">ابزارهای محبوب</h2>
 
-              <p className="mt-0.5 text-sm text-muted-foreground">
+              <p className="mt-0.5 md:text-sm text-xs text-muted-foreground">
                 ابزارهایی که بیشترین استفاده را داشته‌اند.
               </p>
             </div>
-
           </div>
 
           <Link
-            href="/toolbox"
+            href="/popular-toolbox"
             className="
               group
               flex
@@ -54,21 +47,21 @@ function PopularToolsSection() {
               rounded-full
               border
               border-border/70
-              px-4
+              lg:px-4
+              px-2
               py-2
-              text-sm
+              md:text-sm
+              text-xs
               transition-all
               hover:bg-accent
             "
           >
             مشاهده همه
-
             <ChevronLeft
               size={16}
-              className="transition-transform duration-300 group-hover:-translate-x-1"
+              className="transition-transform duration-300 group-hover:-translate-x-1 hidden md:flex"
             />
           </Link>
-
         </div>
 
         {/* Cards */}
@@ -85,15 +78,10 @@ function PopularToolsSection() {
           "
         >
           {popularTools.map((tool) => (
-            <PopularToolCard
-              key={tool.id}
-              {...tool}
-            />
+            <PopularToolCard key={tool.id} {...tool} />
           ))}
         </div>
-
       </div>
-
     </section>
   );
 }

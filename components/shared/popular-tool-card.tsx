@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
 
 interface PopularToolCardProps {
   name: string;
   description: string;
   href: string;
-  icon?: LucideIcon;
   isNew?: boolean;
-  gradient: string;
   pictior: any;
 }
 
@@ -17,9 +14,7 @@ function PopularToolCard({
   name,
   description,
   href,
-  icon: Icon,
   isNew,
-  gradient,
   pictior,
 }: PopularToolCardProps) {
   return (
@@ -72,8 +67,12 @@ function PopularToolCard({
         </div>
 
         <div
-          className="w-full flex items-center gap-1 mt-6 text-slate-100 text-sm font-medium
-         bg-white/10 rounded-xl px-3 py-2 group-hover:bg-white/20 group-hover:dark:bg-purple-900 transition-colors"
+          className="w-full flex items-center gap-1 mt-6 border border-white/10
+ text-slate-100 text-sm font-medium
+         bg-white/10 rounded-xl px-3 py-2 group-hover:bg-white/15
+group-hover:border-purple-400/40
+group-hover:shadow-[0_0_25px_rgba(168,85,247,.18)] transition-all duration-300
+"
         >
           <ChevronLeft size={16} />
           <span>استفاده کنید</span>
