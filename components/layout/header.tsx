@@ -11,10 +11,9 @@ import { usePathname } from "next/navigation";
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-const isHome = pathname === "/";
+  const isHome = pathname === "/";
 
-const showLogo =
-!isHome || scrolled;
+  const showLogo = !isHome || scrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,44 +27,36 @@ const showLogo =
 
   return (
     <header
-      className={`px-1
-py-1.5
-flex
-items-center
-justify-between
-
-transition-all
-duration-500
-ease-out
-
-sticky
-top-0.5
-z-50
+      className={`px-1 py-1.5 flex items-center justify-between transition-all duration-500 ease-out sticky top-0.5 z-40
     ${
       showLogo
         ? "rounded-xl border-b border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/50 shadow-[0_0_35px_rgba(173,70,255,.12)] backdrop-blur-xl"
-        : "pointer-events-none bg-transparent"
-    }
-
-    `}
+        : "bg-transparent"
+    }`}
     >
-        <div
-          className={` ${
-            showLogo
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-3 pointer-events-none"
-          }`}
-        >
-          {/* Logo */}
-          <Link className="w-full flex items-center gap-x-1" href="/">
-            <Image src={logo} alt="logo" width={50} height={50} />
-            <p>جعبه ابزار</p>
-          </Link>
-        </div>
-        <div className="flex items-center">
-          {/* Button */}
-          <ThemeToggle />
-        </div>
+    <div
+  className={`
+    transition-all
+    duration-500
+    ease-[cubic-bezier(0.22,1,0.36,1)]
+
+    ${
+      showLogo
+        ? "opacity-100 translate-y-0 scale-100"
+        : "opacity-0 translate-y-3 scale-95 pointer-events-none"
+    }
+  `}
+>
+        {/* Logo */}
+        <Link className="w-full flex items-center gap-x-1" href="/">
+          <Image src={logo} alt="logo" width={50} height={50} />
+          <p>جعبه ابزار</p>
+        </Link>
+      </div>
+      <div className="flex items-center z-50">
+        {/* Button */}
+        <ThemeToggle />
+      </div>
     </header>
   );
 }
