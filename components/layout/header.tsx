@@ -1,26 +1,71 @@
+"use client";
+
 import ThemeToggle from "../shared/theme-toggle";
 
 import logo from "../../assets/logo/logo.png";
 import Image from "next/image";
-import { ReactNode } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-interface HeaderProps {
-  trigger?: ReactNode;
-}
+function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+const isHome = pathname === "/";
 
-function Header({ trigger }: HeaderProps)  {
+const showLogo =
+!isHome || scrolled;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 80);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="w-full px-1 py-1.5 flex items-center justify-between">
-      <div className="flex items-center gap-x-1">
-         {trigger}
-        {/* Logo */}
-        {/* <Image src={logo} alt="logo" width={50} height={50} />
-        <p>جعبه ابزار</p> */}
-      </div>
-      <div className="flex items-center">
-        {/* Button */}
-        <ThemeToggle />
-      </div>
+    <header
+      className={`px-1
+py-1.5
+flex
+items-center
+justify-between
+
+transition-all
+duration-500
+ease-out
+
+sticky
+top-0.5
+z-50
+    ${
+      showLogo
+        ? "rounded-xl border-b border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/50 shadow-[0_0_35px_rgba(173,70,255,.12)] backdrop-blur-xl"
+        : "pointer-events-none bg-transparent"
+    }
+
+    `}
+    >
+        <div
+          className={` ${
+            showLogo
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-3 pointer-events-none"
+          }`}
+        >
+          {/* Logo */}
+          <Link className="w-full flex items-center gap-x-1" href="/">
+            <Image src={logo} alt="logo" width={50} height={50} />
+            <p>جعبه ابزار</p>
+          </Link>
+        </div>
+        <div className="flex items-center">
+          {/* Button */}
+          <ThemeToggle />
+        </div>
     </header>
   );
 }
