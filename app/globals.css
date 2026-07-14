@@ -137,3 +137,33 @@
 .scrollbar-none {
   scrollbar-width: none;
 }
+
+@keyframes floatGlow {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  25% {
+    transform: translate(25px, -15px) scale(1.04);
+  }
+
+  50% {
+    transform: translate(40px, 20px) scale(1.08);
+  }
+
+  75% {
+    transform: translate(10px, 35px) scale(1.03);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.glow-primary {
+  animation: floatGlow 22s ease-in-out infinite;
+}
+
+.glow-secondary {
+  animation: floatGlow 30s ease-in-out infinite reverse;
+}
