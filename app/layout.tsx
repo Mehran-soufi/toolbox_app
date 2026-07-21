@@ -2,11 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "./provider/theme-provider";
 import "./globals.css";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import NavigationProgress from "@/components/shared/navigation-progress";
 import AppSidebar from "@/components/shared/app-sidebar";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
@@ -142,6 +138,7 @@ export default function RootLayout({
             <div className="w-full flex-1 flex flex-col gap-y-2 min-h-screen">
               <div className="w-11/12 mx-auto flex-1 md:pb-0 flex flex-col gap-y-2 ">
                 <Header />
+                  <NavigationProgress />
                 {children}
                 <Footer />
               </div>
