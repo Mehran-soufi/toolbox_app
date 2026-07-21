@@ -7,6 +7,7 @@ import AppSidebar from "@/components/shared/app-sidebar";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/shared/bottom-nav";
+import PageTransition from "@/components/shared/page-transition";
 
 export const vazirmatn = localFont({
   src: [
@@ -138,8 +139,8 @@ export default function RootLayout({
             <div className="w-full flex-1 flex flex-col gap-y-2 min-h-screen">
               <div className="w-11/12 mx-auto flex-1 md:pb-0 flex flex-col gap-y-2 ">
                 <Header />
-                  <NavigationProgress />
-                {children}
+                <NavigationProgress />
+                <PageTransition>{children}</PageTransition>
                 <Footer />
               </div>
             </div>
