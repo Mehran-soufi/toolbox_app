@@ -43,9 +43,12 @@ const footerItem: footerItemType[] = [
 function Footer() {
   return (
     <footer
-      className="w-full select-none rounded-xl py-3 px-3 mt-2
-    bg-transparent
-     shadow-inner shadow-purple-500"
+      className="w-full select-none rounded-xl xl:py-3 lg:py-2 py-1 xl:px-3 lg:px-2 px-1.5 my-2
+    
+     border
+border-violet-500/20
+bg-background
+shadow-[0_0_30px_rgba(139,92,246,.12)]"
     >
       <div className="w-full flex xl:flex-row flex-col items-center justify-between gap-x-8">
         {footerItem.map((item, index) => {
@@ -58,13 +61,13 @@ function Footer() {
               key={index}
             >
               <div className="flex flex-col items-center justify-center gap-y-1">
-                <p className="">{item.title}</p>
-                <span className="text-sm text-gray-500">
+                <p className="md:text-base text-sm">{item.title}</p>
+                <span className="md:text-sm text-xs text-gray-500">
                   {item.description}
                 </span>
               </div>
               <div className="flex items-center justify-center">
-                <Icon size={36} className={`${item.color}`} />
+                <Icon size={25} className={`${item.color}`} />
               </div>
             </div>
           );

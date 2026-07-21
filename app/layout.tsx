@@ -139,8 +139,8 @@ export default function RootLayout({
         <ThemeProvider>
           <div className="flex">
             <AppSidebar />
-            <div className="w-full flex-1 flex flex-col min-h-screen">
-              <div className="w-11/12 mx-auto flex-1 md:pb-0">
+            <div className="w-full flex-1 flex flex-col gap-y-2 min-h-screen">
+              <div className="w-11/12 mx-auto flex-1 md:pb-0 flex flex-col gap-y-2 ">
                 <Header />
                 {children}
                 <Footer />
