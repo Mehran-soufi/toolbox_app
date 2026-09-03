@@ -8,6 +8,8 @@ import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import BottomNav from "@/components/shared/bottom-nav";
 import PageTransition from "@/components/shared/page-transition";
+import { Toaster } from "@/components/ui/sonner";
+
 
 export const vazirmatn = localFont({
   src: [
@@ -28,7 +30,7 @@ export const vazirmatn = localFont({
 export const metadata: Metadata = {
   title: {
     default: "جعبه ابزار",
-    template: "%s | جعبه ابزار",
+    template: "جعبه ابزار | %s",
   },
 
   description:
@@ -137,10 +139,11 @@ export default function RootLayout({
           <div className="flex">
             <AppSidebar />
             <div className="w-full flex-1 flex flex-col gap-y-2 min-h-screen">
-              <div className="w-11/12 mx-auto flex-1 md:pb-0 flex flex-col gap-y-2 ">
+              <div className="w-11/12 mx-auto flex-1 md:pb-0 flex flex-col gap-y-2">
                 <Header />
                 <NavigationProgress />
                 <PageTransition>{children}</PageTransition>
+                 <Toaster position="top-center" richColors />
                 <Footer />
               </div>
             </div>

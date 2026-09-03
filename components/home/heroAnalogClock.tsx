@@ -1,9 +1,26 @@
+// components/HeroAnalogClock.tsx
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { AnalogClock } from "@hoseinh/react-analog-clock";
+import { useWorldTime } from "@/hooks/use-world-time";
 
 function HeroAnalogClock() {
+  const { time } = useWorldTime({
+    onError: (message) =>
+      toast.error("خطای اتصال به اینترنت", {
+        description: message,
+      }),
+    onSynced: (offset) => {
+      if (Math.abs(offset) > 30000) {
+        toast("هماهنگی ساعت با سرور", {
+          description: "ساعت سیستم شما با سرور اختلاف داشت؛ ساعت هماهنگ شد.",
+        });
+      }
+    },
+  });
+
   const [clockConfig, setClockConfig] = useState({
     size: "140px",
     handLength: {
@@ -22,11 +39,11 @@ function HeroAnalogClock() {
     function handleResize() {
       if (window.innerWidth < 640) {
         setClockConfig({
-          size: "100px",
+          size: "110px",
           handLength: {
-            hour: "35px",
-            minute: "45px",
-            second: "50px",
+            hour: "40px",
+            minute: "46px",
+            second: "53px",
           },
           handThickness: {
             hour: "2px",
@@ -38,8 +55,22 @@ function HeroAnalogClock() {
         setClockConfig({
           size: "120px",
           handLength: {
-            hour: "42px",
-            minute: "52px",
+            hour: "43px",
+            minute: "48px",
+            second: "56px",
+          },
+          handThickness: {
+            hour: "2px",
+            minute: "2px",
+            second: "2px",
+          },
+        });
+      } else if (window.innerWidth < 1440) {
+        setClockConfig({
+          size: "130px",
+          handLength: {
+            hour: "45px",
+            minute: "50px",
             second: "58px",
           },
           handThickness: {
@@ -50,11 +81,11 @@ function HeroAnalogClock() {
         });
       } else {
         setClockConfig({
-          size: "140px",
+          size: "160px",
           handLength: {
-            hour: "50px",
-            minute: "60px",
-            second: "65px",
+            hour: "53px",
+            minute: "63px",
+            second: "68px",
           },
           handThickness: {
             hour: "2px",
@@ -66,23 +97,22 @@ function HeroAnalogClock() {
     }
 
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const [mounted, setMounted] = useState(false);
 
-useEffect(() => {
-  setMounted(true);
-}, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-if (!mounted) return null;
+  if (!mounted || !time) return null;
 
   return (
     <AnalogClock
+      key={time.getTime()}
+      staticDate={time}
       showMinuteHand={true}
       showSecondHand={true}
       showBorder={true}

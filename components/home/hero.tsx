@@ -13,10 +13,11 @@ function Hero() {
         <HeroSearch />
       </div>
       {/* Left */}
-      <div className="lg:w-1/3 w-full rounded-2xl border dark:bg-zinc-900/50 backdrop-blur-xl shadow-[0_0_30px_rgba(173,70,255,.15)] p-3">
-        <div className="flex items-center justify-between">
+      <div className="lg:w-1/3 w-full rounded-2xl border dark:bg-zinc-900/50 
+      backdrop-blur-xl shadow-[0_0_30px_rgba(173,70,255,.15)] xl:p-3 sm:p-2 p-1.5">
+        <div className="flex md:flex-row flex-col-reverse gap-y-1.5 items-center justify-between">
           {/* weather & date */}
-          <div className="sm:max-w-2/5 w-1/2 flex flex-col items-center justify-center">
+          <div className="md:max-w-1/2 w-full flex flex-col items-center justify-center">
             {/* weather */}
             <HeroWeather />
             <div className="w-full h-[1] bg-gray-500 dark:bg-gray-400 my-1"></div>

@@ -167,3 +167,73 @@
 .glow-secondary {
   animation: floatGlow 30s ease-in-out infinite reverse;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 10px;
+}
+
+@font-face {
+   src: url("/font/digital/digital-7.ttf") format("truetype");
+  font-family: "digital";
+  font-display: swap;
+}
+
+.digit-font {
+  font-family: "digital";
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes tool-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-tool-card {
+  animation: tool-card-enter 0.45s ease-out both;
+}
+
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .invoice-paper,
+  .invoice-paper * {
+    visibility: visible;
+  }
+
+  .invoice-paper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    margin: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+}

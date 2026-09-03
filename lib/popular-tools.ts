@@ -1,5 +1,9 @@
 import clockImg from "@/assets/toolbox_img/clock.png";
 import calcImg from "@/assets/toolbox_img/calculator.png";
+import gold from "@/assets/toolbox_img/gold.png";
+import health from "@/assets/toolbox_img/health.png";
+import age from "@/assets/toolbox_img/age.png";
+import currency from "@/assets/toolbox_img/currency.png";
 
 export const popularTools = [
   {
@@ -40,20 +44,20 @@ export const popularTools = [
 
   {
     id: "percentage",
-    name: "درصد",
-    description: "محاسبه درصد و تغییرات",
-    href: "/tools/percentage",
+    name: "قیمت طلا",
+    description: "قیمت لحظه ای طلا",
+    href: "/tools/gold-price",
     isNew: false,
-    pictior: calcImg,
+    pictior: gold,
   },
 
   {
     id: "age-calculator",
-    name: "محاسبه سن",
-    description: "محاسبه دقیق سن و تاریخ تولد",
+    name: "قیمت ارز",
+    description: "قیمت دقیق و لحظه ای ارز",
     href: "/tools/age-calculator",
     isNew: false,
-    pictior: clockImg,
+    pictior: currency,
   },
 
   {
@@ -71,6 +75,6 @@ export const popularTools = [
     description: "بررسی شاخص توده بدنی",
     href: "/tools/bmi-calculator",
     isNew: true,
-    pictior: calcImg,
+    pictior: health,
   },
 ];

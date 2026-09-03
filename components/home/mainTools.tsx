@@ -37,8 +37,8 @@ function MainTools() {
 
           return (
             <Link
-              key={tool.link}
-              href={tool.link}
+              key={tool.href}
+              href={tool.href}
               className="
                 group
                 shrink-0

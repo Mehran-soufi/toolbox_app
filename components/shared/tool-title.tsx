@@ -14,6 +14,18 @@ const variants = {
     icon: "text-violet-500",
     bg: "bg-violet-500/10 dark:bg-violet-500/15",
   },
+  rose: {
+    icon: "text-rose-500",
+    bg: "bg-rose-500/10 dark:bg-pink-500/15",
+  },
+  amber: {
+    icon: "text-amber-500",
+    bg: "bg-amber-500/10 dark:bg-amber-500/15",
+  },
+  violet: {
+    icon: "text-orange-500",
+    bg: "bg-orange-500/10 dark:bg-orange-500/15",
+  },
 };
 
 type Variant = keyof typeof variants;

@@ -18,28 +18,28 @@ function RelatedTools() {
       <div className="w-full h-full py-2 flex flex-col justify-between">
         <div className="w-full flex flex-col gap-1.5">
           <Link
-            href="/tool/percent"
+            href="/tools/percentage"
             className="flex items-center gap-x-2 hover:opacity-70 md:text-sm text-xs"
           >
             <Percent size={16} className="text-purple-700" />
             <span className="opacity-70">درصد</span>
           </Link>
           <Link
-            href="/tool/percent"
+            href="/tools/date-calculator"
             className="flex items-center gap-x-2 hover:opacity-70 md:text-sm text-xs"
           >
             <CalendarDays size={16} className="text-purple-700" />
             <span className="opacity-70">محاسبه تاریخ</span>
           </Link>
           <Link
-            href="/tool/percent"
+            href="/tools/age-calculator"
             className="flex items-center gap-x-2 hover:opacity-70 md:text-sm text-xs"
           >
             <User size={16} className="text-purple-700" />
             <span className="opacity-70">محاسبه سن</span>
           </Link>
           <Link
-            href="/tool/percent"
+            href="/tools/unit-converter"
             className="flex items-center gap-x-2 hover:opacity-70 md:text-sm text-xs"
           >
             <Boxes size={16} className="text-purple-700" />
