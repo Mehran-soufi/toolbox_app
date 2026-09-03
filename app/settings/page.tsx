@@ -32,6 +32,7 @@ import {
   saveTemperatureUnit,
   type TemperatureUnit,
 } from "@/lib/temperature-storage";
+import AboutToolboxDialog from "./about-toolbox-dialog";
 
 // ------------------------------------
 // Page
@@ -49,6 +50,8 @@ export default function SettingsPage() {
 
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [historyCount, setHistoryCount] = useState(0);
+
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   // ------------------------------------
   // Load settings
@@ -408,22 +411,23 @@ export default function SettingsPage() {
           title="درباره جعبه ابزار"
           description="اطلاعات مربوط به سایت"
         >
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
               <p className="text-sm font-medium">نسخه جعبه ابزار</p>
 
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                نسخه اولیه
+                اطلاعات بیشتر درباره امکانات و تکنولوژی‌های پروژه
               </p>
             </div>
 
-            <span className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium dark:bg-zinc-800">
+            <span className="shrink-0 rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium dark:bg-zinc-800">
               v1.0.0
             </span>
           </div>
 
           <button
             type="button"
+            onClick={() => setAboutOpen(true)}
             className="mt-4 flex w-full items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 text-sm transition hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800"
           >
             <span>درباره جعبه ابزار</span>
@@ -431,6 +435,8 @@ export default function SettingsPage() {
             <ChevronLeft className="size-4 text-zinc-400" />
           </button>
         </SettingsSection>
+
+        <AboutToolboxDialog open={aboutOpen} onOpenChange={setAboutOpen} />
       </div>
     </main>
   );
