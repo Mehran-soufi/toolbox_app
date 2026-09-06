@@ -9,6 +9,7 @@ import Header from "@/components/layout/header";
 import BottomNav from "@/components/shared/bottom-nav";
 import PageTransition from "@/components/shared/page-transition";
 import { Toaster } from "@/components/ui/sonner";
+import ScrollToTop from "@/components/layout/scroll-to-top";
 
 
 export const vazirmatn = localFont({
@@ -87,6 +88,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="max-w-full min-h-screen bg-background text-foreground">
+        <ScrollToTop />
         <div className="fixed inset-0 -z-50 overflow-hidden">
           {/* Top Left Glow */}
           <div
