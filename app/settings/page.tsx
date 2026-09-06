@@ -33,6 +33,7 @@ import {
   type TemperatureUnit,
 } from "@/lib/temperature-storage";
 import AboutToolboxDialog from "./about-toolbox-dialog";
+import ContactToolboxDialog from "./contact-toolbox-dialog";
 
 // ------------------------------------
 // Page
@@ -52,6 +53,8 @@ export default function SettingsPage() {
   const [historyCount, setHistoryCount] = useState(0);
 
   const [aboutOpen, setAboutOpen] = useState(false);
+
+  const [contactOpen, setContactOpen] = useState(false);
 
   // ------------------------------------
   // Load settings
@@ -416,7 +419,7 @@ export default function SettingsPage() {
               <p className="text-sm font-medium">نسخه جعبه ابزار</p>
 
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-               اطلاعات بیشتر درباره امکانات و جعبه ابزار
+                اطلاعات بیشتر درباره امکانات و جعبه ابزار
               </p>
             </div>
 
@@ -434,9 +437,21 @@ export default function SettingsPage() {
 
             <ChevronLeft className="size-4 text-zinc-400" />
           </button>
+          <button
+            type="button"
+            onClick={() => setContactOpen(true)}
+            className="mt-2 flex w-full items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 text-sm transition hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800"
+          >
+            <span>ارتباط با ما</span>
+            <ChevronLeft className="size-4 text-zinc-400" />
+          </button>
         </SettingsSection>
 
         <AboutToolboxDialog open={aboutOpen} onOpenChange={setAboutOpen} />
+        <ContactToolboxDialog
+          open={contactOpen}
+          onOpenChange={setContactOpen}
+        />
       </div>
     </main>
   );
