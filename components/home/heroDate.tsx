@@ -13,36 +13,34 @@ function HeroDate() {
     return () => clearInterval(interval);
   }, []);
 
- const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
-  hour: "numeric",
-  minute: "2-digit",
-  hour12: true,
-});
+  const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
-const timeParts = timeFormatter.formatToParts(now);
+  const timeParts = timeFormatter.formatToParts(now);
 
-const hour = timeParts.find((p) => p.type === "hour")?.value;
-const minute = timeParts.find((p) => p.type === "minute")?.value;
+  const hour = timeParts.find((p) => p.type === "hour")?.value;
+  const minute = timeParts.find((p) => p.type === "minute")?.value;
 
-const dayPeriod = now.getHours() >= 12 ? "بعدازظهر" : "صبح";
-
-const time = `${hour}:${minute} ${dayPeriod}`;
+  const time = `${hour}:${minute}`;
 
   const formatter = new Intl.DateTimeFormat("fa-IR", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
-const parts = formatter.formatToParts(now);
+  const parts = formatter.formatToParts(now);
 
-const weekday = parts.find((p) => p.type === "weekday")?.value;
-const day = parts.find((p) => p.type === "day")?.value;
-const month = parts.find((p) => p.type === "month")?.value;
-const year = parts.find((p) => p.type === "year")?.value;
+  const weekday = parts.find((p) => p.type === "weekday")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+  const month = parts.find((p) => p.type === "month")?.value;
+  const year = parts.find((p) => p.type === "year")?.value;
 
-const inDate = `${weekday} ${day} ${month} ${year}`;
+  const inDate = `${weekday} ${day} ${month} ${year}`;
 
   return (
     <div className="flex flex-col items-center justify-center gap-1 px-1 py-0.5">
