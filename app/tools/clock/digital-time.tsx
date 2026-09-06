@@ -1,4 +1,3 @@
-// components/DigitalTime.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,18 +22,16 @@ export default function DigitalTime({
     onSynced: (offset) => {
       if (Math.abs(offset) > 30000) {
         toast("هماهنگی ساعت با سرور", {
-          description: "ساعت سیستم شما با سرور اختلاف داشت؛ ساعت هماهنگ شد.",
+          description:
+            "ساعت سیستم شما با سرور اختلاف داشت؛ ساعت هماهنگ شد.",
         });
       }
     },
   });
 
-  const [mounted, setMounted] = useState(false);
   const [timeStr, setTimeStr] = useState("");
 
   useEffect(() => {
-    setMounted(true);
-
     const updateTime = () => {
       if (!time) return;
 
@@ -65,7 +62,7 @@ export default function DigitalTime({
           ${fontSize}
         `}
       >
-        {mounted && time ? timeStr : "-- : -- : --"}
+        {time && timeStr ? timeStr : "-- : -- : --"}
       </p>
     </div>
   );

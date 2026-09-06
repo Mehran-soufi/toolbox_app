@@ -1,17 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import {
-  Check,
-  Heart,
-  Share2,
-} from "lucide-react";
-
+import { Check, Heart, Share2 } from "lucide-react";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
-
 import {
   isToolFavorite,
   toggleFavoriteTool,
@@ -29,26 +21,23 @@ export default function ToolActions({
   toolSlug,
   toolIcon,
 }: ToolActionsProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isSharing, setIsSharing] = useState(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return isToolFavorite(toolSlug);
+  });
 
   useEffect(() => {
-    setIsFavorite(isToolFavorite(toolSlug));
-
     const handleFavoritesUpdate = () => {
       setIsFavorite(isToolFavorite(toolSlug));
     };
 
-    window.addEventListener(
-      FAVORITES_EVENT,
-      handleFavoritesUpdate
-    );
+    window.addEventListener(FAVORITES_EVENT, handleFavoritesUpdate);
 
     return () => {
-      window.removeEventListener(
-        FAVORITES_EVENT,
-        handleFavoritesUpdate
-      );
+      window.removeEventListener(FAVORITES_EVENT, handleFavoritesUpdate);
     };
   }, [toolSlug]);
 
@@ -69,65 +58,61 @@ export default function ToolActions({
   };
 
   const handleShare = async () => {
-  const url = window.location.href;
+    const url = window.location.href;
 
-  try {
-    // موبایل / مرورگرهایی که Web Share API را پشتیبانی می‌کنند
-    if (
-      typeof navigator.share === "function" &&
-      /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-    ) {
-      await navigator.share({
-        title: toolName,
-        text: `مشاهده ابزار ${toolName}`,
-        url,
-      });
-
-      toast.success("ابزار با موفقیت به اشتراک گذاشته شد");
-      return;
-    }
-
-    // دسکتاپ و مرورگرهای بدون Share مناسب
-    await navigator.clipboard.writeText(url);
-
-    toast.success("لینک ابزار کپی شد");
-  } catch (error) {
-    // اگر کاربر پنجره Share را بست
-    if (
-      error instanceof DOMException &&
-      error.name === "AbortError"
-    ) {
-      return;
-    }
-
-    // روش جایگزین برای Clipboard API
     try {
-      const textarea = document.createElement("textarea");
+      // موبایل / مرورگرهایی که Web Share API را پشتیبانی می‌کنند
+      if (
+        typeof navigator.share === "function" &&
+        /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      ) {
+        await navigator.share({
+          title: toolName,
+          text: `مشاهده ابزار ${toolName}`,
+          url,
+        });
 
-      textarea.value = url;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      textarea.style.pointerEvents = "none";
+        toast.success("ابزار با موفقیت به اشتراک گذاشته شد");
+        return;
+      }
 
-      document.body.appendChild(textarea);
+      // دسکتاپ و مرورگرهای بدون Share مناسب
+      await navigator.clipboard.writeText(url);
+      toast.success("لینک ابزار کپی شد");
+    } catch (error) {
+      // اگر کاربر پنجره Share را بست
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
 
-      textarea.focus();
-      textarea.select();
+      // روش جایگزین برای Clipboard API
+      try {
+        const textarea = document.createElement("textarea");
 
-      const copied = document.execCommand("copy");
+        textarea.value = url;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.pointerEvents = "none";
 
-      document.body.removeChild(textarea);
+        document.body.appendChild(textarea);
 
-      if (copied) {
-        toast.success("لینک ابزار کپی شد");
-      } else {
+        textarea.focus();
+        textarea.select();
+
+        const copied = document.execCommand("copy");
+
+        document.body.removeChild(textarea);
+
+        if (copied) {
+          toast.success("لینک ابزار کپی شد");
+        } else {
+          toast.error("کپی لینک امکان‌پذیر نبود");
+        }
+      } catch {
         toast.error("کپی لینک امکان‌پذیر نبود");
       }
-    } catch {
-      toast.error("کپی لینک امکان‌پذیر نبود");
     }
-  }
-};
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -149,24 +134,14 @@ export default function ToolActions({
         )}
 
         <span className="hidden sm:inline">
-          {isFavorite
-            ? "در محبوب‌ها"
-            : "افزودن به محبوب‌ها"}
+          {isFavorite ? "در محبوب‌ها" : "افزودن به محبوب‌ها"}
         </span>
       </Button>
 
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={handleShare}
-        disabled={isSharing}
-      >
+      <Button type="button" variant="outline" size="sm" onClick={handleShare}>
         <Share2 className="size-4" />
 
-        <span className="hidden sm:inline">
-          اشتراک‌گذاری
-        </span>
+        <span className="hidden sm:inline">اشتراک‌گذاری</span>
       </Button>
     </div>
   );

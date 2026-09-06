@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
 } from "react";
-
 import {
   Check,
   Crop,
@@ -16,9 +15,9 @@ import {
   RotateCw,
   X,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
 
 type AspectRatio = "free" | "1:1" | "4:3" | "3:4" | "16:9" | "9:16";
 
@@ -31,14 +30,10 @@ interface CropData {
 
 interface ImageEditorProps {
   src: string;
-
   rotation: 0 | 90 | 180 | 270;
-
   flipHorizontal: boolean;
   flipVertical: boolean;
-
   crop?: CropData;
-
   onChange: (data: {
     rotation: 0 | 90 | 180 | 270;
     flipHorizontal: boolean;
@@ -51,10 +46,8 @@ type DragMode = "move" | "nw" | "ne" | "sw" | "se" | null;
 
 interface DragState {
   mode: DragMode;
-
   startX: number;
   startY: number;
-
   startCrop: CropData;
 }
 
@@ -76,26 +69,20 @@ export default function ImageEditor({
   onChange,
 }: ImageEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
   const imageRef = useRef<HTMLImageElement>(null);
-
   const dragRef = useRef<DragState | null>(null);
 
   const [mode, setMode] = useState<"preview" | "crop">("preview");
-
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>("free");
-
   const [localCrop, setLocalCrop] = useState<CropData>(crop ?? DEFAULT_CROP);
 
   useEffect(() => {
-    setLocalCrop(crop ?? DEFAULT_CROP);
-  }, [crop]);
+    const timer = setTimeout(() => {
+      setLocalCrop(crop ?? DEFAULT_CROP);
+    }, 0);
 
-  /*
-   * ----------------------------------------
-   * UPDATE PARENT
-   * ----------------------------------------
-   */
+    return () => clearTimeout(timer);
+  }, [crop]);
 
   const update = (
     values: Partial<{
@@ -114,12 +101,6 @@ export default function ImageEditor({
     });
   };
 
-  /*
-   * ----------------------------------------
-   * ROTATE
-   * ----------------------------------------
-   */
-
   const rotateLeft = () => {
     const next = ((rotation - 90 + 360) % 360) as 0 | 90 | 180 | 270;
 
@@ -136,12 +117,6 @@ export default function ImageEditor({
     });
   };
 
-  /*
-   * ----------------------------------------
-   * FLIP
-   * ----------------------------------------
-   */
-
   const toggleFlipHorizontal = () => {
     update({
       flipHorizontal: !flipHorizontal,
@@ -153,12 +128,6 @@ export default function ImageEditor({
       flipVertical: !flipVertical,
     });
   };
-
-  /*
-   * ----------------------------------------
-   * RESET
-   * ----------------------------------------
-   */
 
   const resetEditor = () => {
     setLocalCrop(DEFAULT_CROP);
@@ -174,12 +143,6 @@ export default function ImageEditor({
     setMode("preview");
   };
 
-  /*
-   * ----------------------------------------
-   * GET POINTER POSITION
-   * ----------------------------------------
-   */
-
   const getPointerPosition = (event: ReactPointerEvent) => {
     const container = containerRef.current;
 
@@ -191,16 +154,9 @@ export default function ImageEditor({
 
     return {
       x: ((event.clientX - rect.left) / rect.width) * 100,
-
       y: ((event.clientY - rect.top) / rect.height) * 100,
     };
   };
-
-  /*
-   * ----------------------------------------
-   * START DRAG
-   * ----------------------------------------
-   */
 
   const startDrag = (event: ReactPointerEvent, dragMode: DragMode) => {
     if (mode !== "crop") {
@@ -218,10 +174,8 @@ export default function ImageEditor({
 
     dragRef.current = {
       mode: dragMode,
-
       startX: position.x,
       startY: position.y,
-
       startCrop: {
         ...localCrop,
       },
@@ -229,12 +183,6 @@ export default function ImageEditor({
 
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
   };
-
-  /*
-   * ----------------------------------------
-   * DRAG MOVE
-   * ----------------------------------------
-   */
 
   const handlePointerMove = (event: ReactPointerEvent) => {
     const drag = dragRef.current;
@@ -250,16 +198,11 @@ export default function ImageEditor({
     }
 
     const deltaX = position.x - drag.startX;
-
     const deltaY = position.y - drag.startY;
 
     let nextCrop = {
       ...drag.startCrop,
     };
-
-    /*
-     * MOVE
-     */
 
     if (drag.mode === "move") {
       nextCrop.x = Math.min(
@@ -273,13 +216,8 @@ export default function ImageEditor({
       );
     }
 
-    /*
-     * NORTH WEST
-     */
-
     if (drag.mode === "nw") {
       const right = drag.startCrop.x + drag.startCrop.width;
-
       const bottom = drag.startCrop.y + drag.startCrop.height;
 
       let x = Math.max(0, Math.min(position.x, right - MIN_CROP_SIZE));
@@ -287,7 +225,6 @@ export default function ImageEditor({
       let y = Math.max(0, Math.min(position.y, bottom - MIN_CROP_SIZE));
 
       let width = right - x;
-
       let height = bottom - y;
 
       if (aspectRatio !== "free") {
@@ -310,16 +247,10 @@ export default function ImageEditor({
       };
     }
 
-    /*
-     * NORTH EAST
-     */
-
     if (drag.mode === "ne") {
       const left = drag.startCrop.x;
-
       const bottom = drag.startCrop.y + drag.startCrop.height;
-
-      let x = drag.startCrop.x;
+      const x = drag.startCrop.x;
 
       let y = Math.max(0, Math.min(position.y, bottom - MIN_CROP_SIZE));
 
@@ -351,18 +282,13 @@ export default function ImageEditor({
       };
     }
 
-    /*
-     * SOUTH WEST
-     */
-
     if (drag.mode === "sw") {
       const right = drag.startCrop.x + drag.startCrop.width;
-
       const top = drag.startCrop.y;
 
       let x = Math.max(0, Math.min(position.x, right - MIN_CROP_SIZE));
 
-      let y = top;
+      const y = top;
 
       let width = right - x;
 
@@ -392,13 +318,8 @@ export default function ImageEditor({
       };
     }
 
-    /*
-     * SOUTH EAST
-     */
-
     if (drag.mode === "se") {
       const left = drag.startCrop.x;
-
       const top = drag.startCrop.y;
 
       let width = Math.max(
@@ -421,7 +342,6 @@ export default function ImageEditor({
         }
 
         width = Math.min(width, 100 - left);
-
         height = Math.min(height, 100 - top);
       }
 
@@ -436,12 +356,6 @@ export default function ImageEditor({
     setLocalCrop(nextCrop);
   };
 
-  /*
-   * ----------------------------------------
-   * END DRAG
-   * ----------------------------------------
-   */
-
   const endDrag = () => {
     if (!dragRef.current) {
       return;
@@ -454,12 +368,6 @@ export default function ImageEditor({
     });
   };
 
-  /*
-   * ----------------------------------------
-   * ASPECT RATIO
-   * ----------------------------------------
-   */
-
   const applyAspectRatio = (ratio: AspectRatio) => {
     setAspectRatio(ratio);
 
@@ -470,7 +378,6 @@ export default function ImageEditor({
     const aspect = getAspectRatio(ratio);
 
     let width = localCrop.width;
-
     let height = width / aspect;
 
     if (height > 100) {
@@ -480,9 +387,7 @@ export default function ImageEditor({
 
     const nextCrop = {
       x: (100 - width) / 2,
-
       y: (100 - height) / 2,
-
       width,
       height,
     };
@@ -494,12 +399,6 @@ export default function ImageEditor({
     });
   };
 
-  /*
-   * ----------------------------------------
-   * APPLY / CANCEL
-   * ----------------------------------------
-   */
-
   const applyCrop = () => {
     update({
       crop: localCrop,
@@ -510,23 +409,12 @@ export default function ImageEditor({
 
   const cancelCrop = () => {
     setLocalCrop(crop ?? DEFAULT_CROP);
-
     setMode("preview");
   };
-
-  /*
-   * ----------------------------------------
-   * RENDER
-   * ----------------------------------------
-   */
 
   return (
     <Card className="overflow-hidden border-border/60">
       <CardContent className="space-y-3 p-3">
-        {/* ===============================
-            IMAGE
-        ================================ */}
-
         <div
           ref={containerRef}
           className="relative flex aspect-video items-center justify-center overflow-hidden rounded-xl bg-muted select-none touch-none"
@@ -534,32 +422,29 @@ export default function ImageEditor({
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
         >
-          <img
+          <Image
             ref={imageRef}
             src={src}
             alt="ویرایش تصویر"
+            width={0}
+            height={0}
+            unoptimized
             draggable={false}
             className="max-h-full max-w-full object-contain transition-transform duration-200"
             style={{
+              width: "auto",
+              height: "auto",
               transform: `
-                rotate(${rotation}deg)
-                scaleX(${flipHorizontal ? -1 : 1})
-                scaleY(${flipVertical ? -1 : 1})
-              `,
+      rotate(${rotation}deg)
+      scaleX(${flipHorizontal ? -1 : 1})
+      scaleY(${flipVertical ? -1 : 1})
+    `,
             }}
           />
 
-          {/* ===========================
-              CROP OVERLAY
-          ============================ */}
-
           {mode === "crop" && (
             <>
-              {/* Dark Overlay */}
-
               <div className="pointer-events-none absolute inset-0 bg-black/45" />
-
-              {/* Crop Box */}
 
               <div
                 className="absolute border-2 border-white bg-transparent shadow-[0_0_0_9999px_rgba(0,0,0,0.45)]"
@@ -572,21 +457,12 @@ export default function ImageEditor({
                 }}
                 onPointerDown={(event) => startDrag(event, "move")}
               >
-                {/* Grid */}
-
                 <div className="pointer-events-none absolute inset-0">
                   <div className="absolute left-1/3 top-0 h-full w-px bg-white/40" />
-
                   <div className="absolute left-2/3 top-0 h-full w-px bg-white/40" />
-
                   <div className="absolute left-0 top-1/3 h-px w-full bg-white/40" />
-
                   <div className="absolute left-0 top-2/3 h-px w-full bg-white/40" />
                 </div>
-
-                {/* ======================
-                    CORNERS
-                ======================= */}
 
                 <CropHandle
                   position="nw"
@@ -611,10 +487,6 @@ export default function ImageEditor({
             </>
           )}
         </div>
-
-        {/* ===============================
-            PREVIEW TOOLBAR
-        ================================ */}
 
         {mode === "preview" && (
           <div className="flex flex-wrap items-center justify-center gap-2 rounded-xl border bg-muted/30 p-2">
@@ -680,21 +552,14 @@ export default function ImageEditor({
           </div>
         )}
 
-        {/* ===============================
-            CROP CONTROLS
-        ================================ */}
-
         {mode === "crop" && (
           <div className="space-y-3 rounded-xl border bg-muted/30 p-3">
             <div>
               <p className="text-xs font-semibold">برش تصویر</p>
-
               <p className="mt-1 text-[10px] text-muted-foreground">
                 محدوده را جابه‌جا کنید یا گوشه‌های آن را بکشید.
               </p>
             </div>
-
-            {/* Ratios */}
 
             <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
               {(
@@ -724,8 +589,6 @@ export default function ImageEditor({
               ))}
             </div>
 
-            {/* Actions */}
-
             <div className="flex gap-2">
               <Button
                 type="button"
@@ -748,18 +611,11 @@ export default function ImageEditor({
   );
 }
 
-/*
- * ======================================================
- * CROP HANDLE
- * ======================================================
- */
-
 function CropHandle({
   position,
   onPointerDown,
 }: {
   position: "nw" | "ne" | "sw" | "se";
-
   onPointerDown: (event: ReactPointerEvent<HTMLDivElement>) => void;
 }) {
   const positionClass = {
@@ -777,29 +633,18 @@ function CropHandle({
   );
 }
 
-/*
- * ======================================================
- * ASPECT RATIO HELPER
- * ======================================================
- */
-
 function getAspectRatio(ratio: AspectRatio) {
   switch (ratio) {
     case "1:1":
       return 1;
-
     case "4:3":
       return 4 / 3;
-
     case "3:4":
       return 3 / 4;
-
     case "16:9":
       return 16 / 9;
-
     case "9:16":
       return 9 / 16;
-
     default:
       return 1;
   }

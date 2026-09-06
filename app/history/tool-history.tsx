@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import {
   Clock,
   Trash2,
@@ -15,8 +16,11 @@ import {
   RefreshCw,
   History,
   Toolbox,
+  type LucideIcon,
 } from "lucide-react";
+
 import { toast } from "sonner";
+
 import {
   getToolHistory,
   removeToolHistoryItem,
@@ -24,12 +28,13 @@ import {
   formatToolTime,
   type ToolHistoryItem,
 } from "@/lib/tool-history";
+
 import { cn } from "@/lib/utils";
 import { toPersianNumber } from "@/lib/number";
 import MainTools from "@/components/home/mainTools";
 
 // مپ آیکون‌ها
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, LucideIcon> = {
   Languages,
   Weight,
   Palette,
@@ -75,42 +80,53 @@ export default function ToolHistory({
   const [history, setHistory] = useState<ToolHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const router = useRouter();
 
-  const loadHistory = () => {
+  const loadHistory = useCallback(() => {
     setIsLoading(true);
+
     const items = getToolHistory();
+
     setHistory(items.slice(0, maxItems));
     setIsLoading(false);
-  };
+  }, [maxItems]);
 
   useEffect(() => {
-    loadHistory();
-  }, []);
+    const timer = setTimeout(() => {
+      loadHistory();
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [loadHistory]);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+
     setTimeout(() => {
       loadHistory();
       setIsRefreshing(false);
+
       toast.success("تاریخچه بروزرسانی شد");
     }, 400);
   };
 
   const handleRemove = (id: string) => {
     removeToolHistoryItem(id);
+
     setHistory((prev) => prev.filter((item) => item.id !== id));
+
     toast.success("مورد از تاریخچه حذف شد");
   };
 
   const handleClearAll = () => {
     clearToolHistory();
     setHistory([]);
+
     toast.success("تاریخچه با موفقیت پاک شد");
   };
 
   const getIcon = (iconName: string) => {
     const IconComponent = ICON_MAP[iconName] || History;
+
     return <IconComponent className="size-5" />;
   };
 
@@ -133,7 +149,7 @@ export default function ToolHistory({
 
   if (history.length === 0) {
     return (
-      <div className="w-full my-3 flex items-center justify-between flex-col gap-6">
+      <div className="my-3 flex w-full flex-col items-center justify-between gap-6">
         <div
           className={cn(
             "w-full rounded-2xl border border-zinc-200/70 bg-white/60 p-8 text-center backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/50",
@@ -144,21 +160,26 @@ export default function ToolHistory({
             <div className="mb-3 flex size-14 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
               <Clock className="size-7 text-zinc-400" />
             </div>
+
             <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
               تاریخچه خالی است
             </p>
-            <p className="mt-1 text-xs text-zinc-500 ">
+
+            <p className="mt-1 text-xs text-zinc-500">
               با استفاده از ابزارها، تاریخچه شما در اینجا نمایش داده می‌شود.
             </p>
           </div>
         </div>
-        <div className="w-full flex items-center justify-between flex-col gap-3">
-          <div className="w-full flex items-center justify-start gap-x-2">
+
+        <div className="flex w-full flex-col items-center justify-between gap-3">
+          <div className="flex w-full items-center justify-start gap-x-2">
             <Toolbox size={16} />
-            <p className=" font-semibold text-xs md:text-sm">
+
+            <p className="text-xs font-semibold md:text-sm">
               ابزار های پیشنهادی
             </p>
           </div>
+
           <MainTools />
         </div>
       </div>
@@ -166,16 +187,19 @@ export default function ToolHistory({
   }
 
   return (
-    <div className="flex flex-col gap-6 min-h-100">
+    <div className="flex min-h-100 flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-2 md:mb-4">
+      <div className="mb-2 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
             <History className="size-5 text-violet-500" />
+
             <h2 className="text-lg font-bold">تاریخچه استفاده</h2>
           </div>
+
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            آخرین ابزارهای استفاده شده ({toPersianNumber(history.length)} مورد)
+            آخرین ابزارهای استفاده شده (
+            {toPersianNumber(history.length)} مورد)
           </p>
         </div>
 
@@ -190,6 +214,7 @@ export default function ToolHistory({
               <RefreshCw
                 className={cn("size-4", isRefreshing && "animate-spin")}
               />
+
               بروزرسانی
             </button>
           )}
@@ -201,6 +226,7 @@ export default function ToolHistory({
               className="inline-flex w-fit items-center gap-2 rounded-xl border border-red-200 bg-white px-3 py-2 text-sm text-red-600 transition hover:bg-red-50 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-400 dark:hover:bg-red-950/40"
             >
               <Trash2 className="size-4" />
+
               پاک کردن همه
             </button>
           )}
@@ -208,12 +234,13 @@ export default function ToolHistory({
       </div>
 
       {/* Grid کارت‌ها */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {history.map((item, index) => {
           const isFirst = index === 0;
           const IconComponent = getIcon(item.toolIcon);
           const actionLabel = ACTION_MAP[item.action] || item.action;
-          const actionColor = ACTION_COLOR[item.action] || "text-zinc-500";
+          const actionColor =
+            ACTION_COLOR[item.action] || "text-zinc-500";
 
           return (
             <div
@@ -240,7 +267,7 @@ export default function ToolHistory({
                 <div className="flex items-start justify-between gap-3">
                   <Link
                     href={getToolPath(item.toolSlug)}
-                    className="flex-1 min-w-0"
+                    className="min-w-0 flex-1"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -257,21 +284,26 @@ export default function ToolHistory({
                       <div className="min-w-0">
                         <p
                           className={cn(
-                            "font-semibold transition-colors hover:text-violet-500 truncate",
-                            isFirst && "text-violet-700 dark:text-violet-400",
+                            "truncate font-semibold transition-colors hover:text-violet-500",
+                            isFirst &&
+                              "text-violet-700 dark:text-violet-400",
                           )}
                         >
                           {item.toolName}
                         </p>
 
-                        <div className="mt-1 flex items-center gap-2 flex-wrap">
+                        <div className="mt-1 flex flex-wrap items-center gap-2">
                           <span
-                            className={cn("text-xs font-medium", actionColor)}
+                            className={cn(
+                              "text-xs font-medium",
+                              actionColor,
+                            )}
                           >
                             {actionLabel}
                           </span>
+
                           {isFirst && (
-                            <span className="text-[8px] font-medium text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 px-1.5 py-0.5 rounded whitespace-nowrap">
+                            <span className="whitespace-nowrap rounded bg-emerald-50 px-1.5 py-0.5 text-[8px] font-medium text-emerald-500 dark:bg-emerald-950/30">
                               آخرین استفاده
                             </span>
                           )}
@@ -282,6 +314,7 @@ export default function ToolHistory({
 
                   {/* دکمه حذف */}
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemove(item.id);
@@ -298,6 +331,7 @@ export default function ToolHistory({
                   <span className="text-zinc-500 dark:text-zinc-400">
                     {isFirst ? "آخرین استفاده" : "زمان استفاده"}
                   </span>
+
                   <span className="font-medium">
                     {formatToolTime(item.timestamp)}
                   </span>

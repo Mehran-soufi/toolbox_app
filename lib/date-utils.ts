@@ -1,6 +1,10 @@
-// lib/date-utils.ts
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
-import { format as formatJalali } from 'date-fns-jalali';
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  startOfMonth,
+} from "date-fns";
+import { format as formatJalali } from "date-fns-jalali";
 
 export interface DayData {
   date: Date;
@@ -13,18 +17,16 @@ export interface DayData {
 export const getCalendarDays = (viewDate: Date): DayData[] => {
   const start = startOfMonth(viewDate);
   const end = endOfMonth(viewDate);
-  
-  const firstDayOfMonth = startOfMonth(viewDate);
-  const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: endOfMonth(viewDate) });
-  
-  const startOfGrid = subMonths(start, 0); 
-  
+  const daysInMonth = eachDayOfInterval({
+    start,
+    end,
+  });
 
-  return daysInMonth.map(day => ({
+  return daysInMonth.map((day) => ({
     date: day,
-    jalali: formatJalali(day, 'd'),
-    gregorian: format(day, 'd'),
+    jalali: formatJalali(day, "d"),
+    gregorian: format(day, "d"),
     lunar: "...",
-    isCurrentMonth: true
+    isCurrentMonth: true,
   }));
 };

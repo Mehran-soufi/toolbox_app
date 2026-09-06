@@ -43,6 +43,7 @@ type WeatherData = {
     sunset: string[];
   };
 };
+
 export default function ShowWeather() {
   const [city, setCity] = useState<City>(() => {
     if (typeof window === "undefined") {
@@ -55,12 +56,17 @@ export default function ShowWeather() {
   const [data, setData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
   const [temperatureUnit, setTemperatureUnit] =
-    useState<TemperatureUnit>("celsius");
+    useState<TemperatureUnit>(() => {
+      if (typeof window === "undefined") {
+        return "celsius";
+      }
+
+      return getTemperatureUnit();
+    });
 
   useEffect(() => {
-    setTemperatureUnit(getTemperatureUnit());
-
     function handleTemperatureUnitChange(event: Event) {
       const customEvent = event as CustomEvent<TemperatureUnit>;
 
@@ -107,7 +113,10 @@ export default function ShowWeather() {
 
         setData(result);
       } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
+        if (
+          error instanceof DOMException &&
+          error.name === "AbortError"
+        ) {
           return;
         }
 
@@ -154,7 +163,10 @@ export default function ShowWeather() {
       return null;
     }
 
-    const times = data.hourly.time.slice(startIndex, startIndex + 24);
+    const times = data.hourly.time.slice(
+      startIndex,
+      startIndex + 24,
+    );
 
     const temperatures = data.hourly.temperature_2m.slice(
       startIndex,
@@ -261,6 +273,7 @@ export default function ShowWeather() {
   return (
     <div dir="rtl" className="relative w-full space-y-4">
       {/* Header */}
+
       <div
         className="
           flex
@@ -283,10 +296,14 @@ export default function ShowWeather() {
           شهر فعلی:
         </span>
 
-        <CitySelector value={city} onChange={handleCityChange} />
+        <CitySelector
+          value={city}
+          onChange={handleCityChange}
+        />
       </div>
 
       {/* Current Weather */}
+
       <div
         className="
           relative
@@ -303,6 +320,7 @@ export default function ShowWeather() {
         "
       >
         {/* Loading Overlay */}
+
         {loading && (
           <div
             className="
@@ -335,21 +353,30 @@ export default function ShowWeather() {
 
         <div className="space-y-6">
           {/* City */}
+
           <div>
-            <p className="text-xs text-zinc-400">وضعیت فعلی</p>
+            <p className="text-xs text-zinc-400">
+              وضعیت فعلی
+            </p>
 
-            <h2 className="mt-1 text-xl font-bold">{city.name}</h2>
+            <h2 className="mt-1 text-xl font-bold">
+              {city.name}
+            </h2>
 
-            <p className="mt-0.5 text-sm text-zinc-400">{city.province}</p>
+            <p className="mt-0.5 text-sm text-zinc-400">
+              {city.province}
+            </p>
           </div>
 
           {/* Temperature */}
+
           <div className="flex items-center justify-between gap-4">
             <div>
               <div className="flex items-start">
                 <span className="mt-1 text-2xl">
                   °{temperatureUnit === "fahrenheit" ? "F" : "C"}
                 </span>
+
                 <span className="text-5xl font-bold">
                   {toPersianNumber(
                     Math.round(
@@ -368,11 +395,15 @@ export default function ShowWeather() {
             </div>
 
             <div className={weather.color}>
-              <WeatherIcon className="size-20" strokeWidth={1.5} />
+              <WeatherIcon
+                className="size-20"
+                strokeWidth={1.5}
+              />
             </div>
           </div>
 
           {/* Min / Max */}
+
           <div
             className="
               grid
@@ -410,13 +441,16 @@ export default function ShowWeather() {
           </div>
 
           {/* Extra Information */}
+
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {current.relative_humidity_2m !== undefined && (
               <WeatherInfo
                 icon={Droplets}
                 title="رطوبت"
                 value={`${toPersianNumber(
-                  Math.round(current.relative_humidity_2m),
+                  Math.round(
+                    current.relative_humidity_2m,
+                  ),
                 )}%`}
               />
             )}
@@ -442,6 +476,7 @@ export default function ShowWeather() {
       </div>
 
       {/* Hourly Chart */}
+
       {hourlyData && (
         <div
           className="
@@ -457,7 +492,9 @@ export default function ShowWeather() {
           "
         >
           <div className="mb-5">
-            <h3 className="text-base font-bold">پیش‌بینی دمای ساعتی</h3>
+            <h3 className="text-base font-bold">
+              پیش‌بینی دمای ساعتی
+            </h3>
 
             <p className="mt-1 text-xs text-zinc-400">
               تغییرات دما در ۲۴ ساعت آینده
@@ -471,31 +508,32 @@ export default function ShowWeather() {
           />
         </div>
       )}
+
       {/* 7 Day Forecast */}
+
       <WeatherForecast
         dates={daily.time}
         weatherCodes={daily.weather_code}
         minTemperatures={daily.temperature_2m_min}
         maxTemperatures={daily.temperature_2m_max}
-        precipitationProbabilities={daily.precipitation_probability_max}
+        precipitationProbabilities={
+          daily.precipitation_probability_max
+        }
         windSpeeds={daily.wind_speed_10m_max}
         temperatureUnit={temperatureUnit}
       />
 
       {/* Sunrise / Sunset */}
+
       {(daily.sunrise?.[0] || daily.sunset?.[0]) && (
-        <div
-          className="
-            grid
-            grid-cols-2
-            gap-3
-          "
-        >
+        <div className="grid grid-cols-2 gap-3">
           {daily.sunrise?.[0] && (
             <WeatherInfo
               icon={Sunrise}
               title="طلوع خورشید"
-              value={new Date(daily.sunrise[0]).toLocaleTimeString("fa-IR", {
+              value={new Date(
+                daily.sunrise[0],
+              ).toLocaleTimeString("fa-IR", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
@@ -506,7 +544,9 @@ export default function ShowWeather() {
             <WeatherInfo
               icon={Sunset}
               title="غروب خورشید"
-              value={new Date(daily.sunset[0]).toLocaleTimeString("fa-IR", {
+              value={new Date(
+                daily.sunset[0],
+              ).toLocaleTimeString("fa-IR", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
@@ -546,12 +586,21 @@ function WeatherInfo({
         dark:bg-zinc-900/40
       "
     >
-      {Icon && <Icon className={`size-5 ${iconClassName}`} strokeWidth={1.8} />}
+      {Icon && (
+        <Icon
+          className={`size-5 ${iconClassName}`}
+          strokeWidth={1.8}
+        />
+      )}
 
       <div className="min-w-0">
-        <p className="text-[11px] text-zinc-400">{title}</p>
+        <p className="text-[11px] text-zinc-400">
+          {title}
+        </p>
 
-        <p className="truncate text-sm font-medium">{value}</p>
+        <p className="truncate text-sm font-medium">
+          {value}
+        </p>
       </div>
     </div>
   );

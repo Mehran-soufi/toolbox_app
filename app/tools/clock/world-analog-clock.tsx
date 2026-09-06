@@ -1,4 +1,3 @@
-// components/WorldAnalogClock.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -104,17 +103,15 @@ export default function WorldAnalogClock({
     }
 
     handleResize();
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted || !time) return null;
+  if (!time) return null;
 
   return (
     <AnalogClock

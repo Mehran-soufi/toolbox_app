@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import {
   isFavoriteTool,
   toggleFavoriteTool,
@@ -12,15 +11,32 @@ export function useToolFavorite(
   toolSlug: string,
   toolIcon: string,
 ) {
-  const [isFavorite, setIsFavorite] =
-    useState(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
 
-  const [isReady, setIsReady] =
-    useState(false);
+    return isFavoriteTool(toolSlug);
+  });
+
+  const [isReady] = useState(true);
 
   useEffect(() => {
-    setIsFavorite(isFavoriteTool(toolSlug));
-    setIsReady(true);
+    const handleFavoritesUpdate = () => {
+      setIsFavorite(isFavoriteTool(toolSlug));
+    };
+
+    window.addEventListener(
+      "favorite-tools-updated",
+      handleFavoritesUpdate,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "favorite-tools-updated",
+        handleFavoritesUpdate,
+      );
+    };
   }, [toolSlug]);
 
   const toggleFavorite = () => {

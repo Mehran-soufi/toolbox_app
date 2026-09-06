@@ -1,23 +1,24 @@
-// components/Time.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import HeroAnalogClock from "@/components/home/heroAnalogClock";
 import DigitalTime from "./digital-time";
-import { useWorldTime } from "@/hooks/use-world-time";
+
+interface PersianDate {
+  day: string;
+  month: string;
+  year: string;
+  dayName: string;
+}
 
 export default function Time() {
-  const [persian, setPersian] = useState({
+  const [persian, setPersian] = useState<PersianDate>({
     day: "۱۵",
     month: "مرداد",
     year: "۱۴۰۵",
     dayName: "پنجشنبه",
   });
 
-  // hook مشترک برای هماهنگی ساعت با سرور
-  const { time } = useWorldTime();
-
-  // گرفتن تاریخ شمسی از API
   useEffect(() => {
     async function fetchPersianDate() {
       try {
@@ -38,52 +39,47 @@ export default function Time() {
   return (
     <div
       className="
-        flex-1 
-        min-w-0 
-        lg:flex-row 
-        flex-col-reverse 
-        flex 
-        items-center 
+        flex-1
+        min-w-0
+        lg:flex-row
+        flex-col-reverse
+        flex
+        items-center
         p-4
-        border 
-        border-zinc-200  
-        dark:border-zinc-800  
-        bg-white/60 
-        dark:bg-zinc-900/50 
-        shadow-[0_0_35px_rgba(173,70,255,.12)] 
-        backdrop-blur-xl 
+        border
+        border-zinc-200
+        dark:border-zinc-800
+        bg-white/60
+        dark:bg-zinc-900/50
+        shadow-[0_0_35px_rgba(173,70,255,.12)]
+        backdrop-blur-xl
         rounded-xl
       "
     >
       <div
         className="
-          flex 
-          lg:flex-row 
-          flex-col-reverse 
-          w-full 
-          items-center 
-          justify-between 
-          xl:gap-6 
-          md:gap-5 
+          flex
+          lg:flex-row
+          flex-col-reverse
+          w-full
+          items-center
+          justify-between
+          xl:gap-6
+          md:gap-5
           gap-3
         "
       >
         <div
           className="
-            flex-1 
-            flex 
-            items-center 
-            flex-col 
-            gap-y-1 
+            flex-1
+            flex
+            items-center
+            flex-col
+            gap-y-1
             shrink-0
           "
         >
-          <DigitalTime
-            // timeZone={""}
-            // city={""}
-            // date={time ?? new Date()}
-            fontSize="text-5xl sm:text-6xl lg:text-7xl xl:text-9xl"
-          />
+          <DigitalTime fontSize="text-5xl sm:text-6xl lg:text-7xl xl:text-9xl" />
 
           <div className="flex items-center justify-center">
             <p className="text-zinc-500 dark:text-zinc-400 text-base lg:text-lg">

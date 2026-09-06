@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { 
-  addToolHistoryItem, 
-  TOOL_ICONS, 
+import { useCallback, useEffect, useRef } from "react";
+import {
+  addToolHistoryItem,
+  TOOL_ICONS,
   TOOL_SLUGS,
-  type ToolAction 
+  type ToolAction,
 } from "@/lib/tool-history";
 
 interface UseToolHistoryProps {
@@ -15,6 +15,8 @@ interface UseToolHistoryProps {
   autoLogView?: boolean;
 }
 
+type HistoryDetails = Record<string, unknown>;
+
 export function useToolHistory({
   toolName,
   toolSlug,
@@ -23,61 +25,79 @@ export function useToolHistory({
 }: UseToolHistoryProps) {
   const isViewLogged = useRef(false);
 
-  const getToolSlug = (): string => {
-    return toolSlug || TOOL_SLUGS[toolName] || toolName.toLowerCase().replace(/\s/g, "-");
-  };
+  const getToolSlug = useCallback((): string => {
+    return (
+      toolSlug ||
+      TOOL_SLUGS[toolName] ||
+      toolName.toLowerCase().replace(/\s/g, "-")
+    );
+  }, [toolName, toolSlug]);
 
-  const getToolIcon = (): string => {
+  const getToolIcon = useCallback((): string => {
     return toolIcon || TOOL_ICONS[toolName] || "Tool";
-  };
+  }, [toolName, toolIcon]);
 
   useEffect(() => {
     if (autoLogView && !isViewLogged.current) {
       const slug = getToolSlug();
       const icon = getToolIcon();
-      
+
       addToolHistoryItem(toolName, slug, icon, "view");
-      
+
       isViewLogged.current = true;
     }
-  }, [toolName, autoLogView]);
+  }, [autoLogView, getToolIcon, getToolSlug, toolName]);
 
-  const logAction = (
-    action: ToolAction = "use",
-    details?: Record<string, any>
-  ) => {
-    const slug = getToolSlug();
-    const icon = getToolIcon();
-    
-    addToolHistoryItem(toolName, slug, icon, action, details);
-  };
+  const logAction = useCallback(
+    (
+      action: ToolAction = "use",
+      details?: HistoryDetails,
+    ) => {
+      const slug = getToolSlug();
+      const icon = getToolIcon();
 
-  const logCalculate = (input: any, output: any) => {
-    logAction("calculate", { input, output });
-  };
+      addToolHistoryItem(toolName, slug, icon, action, details);
+    },
+    [getToolIcon, getToolSlug, toolName],
+  );
 
-  const logTranslate = (input: string, output: string, targetLang?: string) => {
-    logAction("translate", {
-      input: input.length > 50 ? input.slice(0, 50) + "..." : input,
-      output: output.length > 50 ? output.slice(0, 50) + "..." : output,
-      targetLang,
-    });
-  };
+  const logCalculate = useCallback(
+    (input: unknown, output: unknown) => {
+      logAction("calculate", { input, output });
+    },
+    [logAction],
+  );
 
-  // تابع جدید برای دریافت/بروزرسانی قیمت‌ها
-  const logFetch = (input: any, output: any) => {
-    logAction("fetch", { input, output });
-  };
+  const logTranslate = useCallback(
+    (input: string, output: string, targetLang?: string) => {
+      logAction("translate", {
+        input: input.length > 50 ? `${input.slice(0, 50)}...` : input,
+        output: output.length > 50 ? `${output.slice(0, 50)}...` : output,
+        targetLang,
+      });
+    },
+    [logAction],
+  );
 
-  const logUse = (details?: Record<string, any>) => {
-    logAction("use", details);
-  };
+  const logFetch = useCallback(
+    (input: unknown, output: unknown) => {
+      logAction("fetch", { input, output });
+    },
+    [logAction],
+  );
+
+  const logUse = useCallback(
+    (details?: HistoryDetails) => {
+      logAction("use", details);
+    },
+    [logAction],
+  );
 
   return {
     logAction,
     logCalculate,
     logTranslate,
-    logFetch,  
+    logFetch,
     logUse,
   };
 }

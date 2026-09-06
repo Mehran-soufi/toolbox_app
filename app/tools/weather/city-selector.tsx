@@ -25,11 +25,7 @@ export default function CitySelector({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (value) {
-      setSelectedCity(value);
-    }
-  }, [value]);
+  const currentCity = value ?? selectedCity;
 
   // جلوگیری از اسکرول صفحه هنگام باز بودن Modal
   useEffect(() => {
@@ -97,7 +93,7 @@ export default function CitySelector({
   }
 
   function handleSelect(city: City) {
-    if (city.id === selectedCity.id) {
+    if (city.id === currentCity.id) {
       handleClose();
       return;
     }
@@ -142,11 +138,11 @@ export default function CitySelector({
         />
 
         <span className="font-medium">
-          {selectedCity.name}
+          {currentCity.name}
         </span>
 
         <span className="text-xs text-zinc-400">
-          ({selectedCity.province})
+          ({currentCity.province})
         </span>
       </button>
 
@@ -343,7 +339,7 @@ export default function CitySelector({
                   <div className="space-y-1">
                     {filteredCities.map((city) => {
                       const isSelected =
-                        selectedCity.id === city.id;
+                        currentCity.id === city.id;
 
                       return (
                         <button

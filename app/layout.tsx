@@ -11,7 +11,6 @@ import PageTransition from "@/components/shared/page-transition";
 import { Toaster } from "@/components/ui/sonner";
 import ScrollToTop from "@/components/layout/scroll-to-top";
 
-
 export const vazirmatn = localFont({
   src: [
     {
@@ -29,30 +28,36 @@ export const vazirmatn = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tlbbox-app.vercel.app"),
+
   title: {
-    default: "جعبه ابزار",
-    template: "جعبه ابزار | %s",
+    default: "جعبه ابزار | ابزارهای آنلاین کاربردی",
+    template: "%s | جعبه ابزار",
   },
 
   description:
-    "جعبه ابزار؛ مجموعه‌ای از ابزارهای آنلاین کاربردی شامل ماشین حساب، ساعت جهانی، تایمر، کرنومتر، تبدیل واحد، قیمت ارز و طلا، آب‌وهوا و ده‌ها ابزار مفید دیگر.",
+    "جعبه ابزار مجموعه‌ای از ابزارهای آنلاین رایگان و کاربردی برای محاسبه، تبدیل، زمان، تاریخ، آب‌وهوا، قیمت‌ها، متن، QR کد و سایر نیازهای روزمره.",
 
   keywords: [
     "جعبه ابزار",
     "ابزار آنلاین",
-    "ماشین حساب",
-    "تایمر",
-    "کرنومتر",
-    "ساعت جهانی",
-    "تاریخ شمسی",
-    "تقویم",
-    "قیمت ارز",
-    "قیمت طلا",
+    "ابزارهای آنلاین",
+    "ابزار کاربردی",
+    "ابزار رایگان",
+    "ماشین حساب آنلاین",
     "تبدیل واحد",
+    "محاسبه درصد",
+    "محاسبه سن",
+    "محاسبه تاریخ",
+    "تقویم آنلاین",
+    "تایمر آنلاین",
+    "کرنومتر آنلاین",
     "آب و هوا",
-    "ابزارهای کاربردی",
-    "Online Tools",
-    "Toolbox",
+    "قیمت طلا",
+    "قیمت ارز",
+    "ساخت QR کد",
+    "تبدیل تصویر",
+    "ویرایش متن",
   ],
 
   authors: [
@@ -63,15 +68,41 @@ export const metadata: Metadata = {
   ],
 
   creator: "Mehran Soufi",
-  publisher: "Toolbox",
-
-  applicationName: "Toolbox",
-
+  publisher: "جعبه ابزار",
+  applicationName: "جعبه ابزار",
   category: "Utilities",
+
+  alternates: {
+    canonical: "/",
+  },
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "fa_IR",
+    url: "/",
+    siteName: "جعبه ابزار",
+    title: "جعبه ابزار | ابزارهای آنلاین کاربردی",
+    description:
+      "مجموعه‌ای از ابزارهای آنلاین رایگان و کاربردی برای محاسبه، تبدیل، زمان، تاریخ، آب‌وهوا، قیمت‌ها، متن و موارد دیگر.",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "جعبه ابزار | ابزارهای آنلاین کاربردی",
+    description:
+      "مجموعه‌ای از ابزارهای آنلاین رایگان و کاربردی برای نیازهای روزمره.",
   },
 };
 
@@ -145,7 +176,7 @@ export default function RootLayout({
                 <Header />
                 <NavigationProgress />
                 <PageTransition>{children}</PageTransition>
-                 <Toaster position="top-center" richColors />
+                <Toaster position="top-center" richColors />
                 <Footer />
               </div>
             </div>

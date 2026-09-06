@@ -12,12 +12,8 @@ interface HistoryProps {
 }
 
 export default function History({ history, onSelect, onClear }: HistoryProps) {
-  const clearHistory = () => {
-    localStorage.removeItem("calculator-history");
-  };
-
   return (
-    <div className="flex h-full flex-col gap-3 select-none">
+    <div className="flex h-full select-none flex-col gap-3">
       <ToolDesTitle icon={HistoryIcon} title="تاریخچه محاسبات" />
 
       {history.length === 0 ? (

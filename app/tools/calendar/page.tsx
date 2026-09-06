@@ -1,37 +1,20 @@
 import { Metadata } from "next";
-
 import AppBreadcrumb from "@/components/shared/app-breadcrumb";
+import ToolActions from "@/components/shared/tool-actions";
 import ToolContent from "@/components/shared/tool-content";
 import ToolTitle from "@/components/shared/tool-title";
 import { calendarContent } from "@/lib/tool-content-data";
 import { Calendar } from "lucide-react";
-import { CalendarEvent } from "@/lib/calendar-types";
 import CalendarContainer from "./calendar-container";
-import ToolActions from "@/components/shared/tool-actions";
 
 export const metadata: Metadata = {
   title: "تقویم",
 };
 
-interface CalendarPageProps {
-  events?: CalendarEvent[];
-}
-
-export default function CalendarPage({
-  events: propsEvents,
-}: CalendarPageProps) {
-  const events: CalendarEvent[] =
-    propsEvents && propsEvents.length > 0
-      ? propsEvents
-      : [
-          { date: "1402/12/25", title: "تست: عید نوروز", isHoliday: true },
-          { date: "1402/12/26", title: "تست: جلسه کاری", isHoliday: false },
-        ];
-
+export default function CalendarPage() {
   return (
     <div className="my-3 flex flex-col gap-y-3">
-      {/* Breadcrumb */}
-      <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <AppBreadcrumb
           items={[
             { title: "خانه", href: "/" },
@@ -40,11 +23,14 @@ export default function CalendarPage({
           ]}
         />
 
-        <ToolActions toolName="تقویم" toolSlug="calendar" toolIcon="Calendar" />
+        <ToolActions
+          toolName="تقویم"
+          toolSlug="calendar"
+          toolIcon="Calendar"
+        />
       </div>
 
-      <div className="w-full flex flex-col gap-y-2.5">
-        {/* Tool Title */}
+      <div className="flex w-full flex-col gap-y-2.5">
         <ToolTitle
           icon={Calendar}
           title="تقویم"
@@ -53,13 +39,11 @@ export default function CalendarPage({
         />
       </div>
 
-      {/* 1. Main Calendar Section */}
       <div className="w-full">
         <CalendarContainer />
       </div>
 
-      {/* Description Section */}
-      <div className="w-full mt-3">
+      <div className="mt-3 w-full">
         <ToolContent
           title={calendarContent.title}
           icon={calendarContent.icon}

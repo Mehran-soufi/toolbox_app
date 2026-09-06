@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { getWeather } from "@/lib/weather";
 import { defaultCity, type City } from "@/lib/cities";
 import { weatherCode } from "@/lib/weather-code";
 import { toPersianNumber } from "@/lib/number";
 import { getSavedCity } from "@/lib/city-storage";
-
 import {
   getTemperatureUnit,
   convertTemperature,
@@ -15,20 +13,26 @@ import {
 } from "@/lib/temperature-storage";
 
 function HeroWeather() {
-  const [city, setCity] = useState<City>(defaultCity);
-  const [weatherData, setWeatherData] = useState<Awaited<
-    ReturnType<typeof getWeather>
-  > | null>(null);
-  const [temperatureUnit, setTemperatureUnit] =
-    useState<TemperatureUnit>("celsius");
-
-  useEffect(() => {
-    const savedCity = getSavedCity();
-
-    if (savedCity) {
-      setCity(savedCity);
+  const [city, setCity] = useState<City>(() => {
+    if (typeof window === "undefined") {
+      return defaultCity;
     }
-  }, []);
+
+    return getSavedCity() ?? defaultCity;
+  });
+
+  const [weatherData, setWeatherData] = useState<
+    Awaited<ReturnType<typeof getWeather>> | null
+  >(null);
+
+  const [temperatureUnit, setTemperatureUnit] =
+    useState<TemperatureUnit>(() => {
+      if (typeof window === "undefined") {
+        return "celsius";
+      }
+
+      return getTemperatureUnit();
+    });
 
   useEffect(() => {
     let cancelled = false;
@@ -71,8 +75,6 @@ function HeroWeather() {
   }, []);
 
   useEffect(() => {
-    setTemperatureUnit(getTemperatureUnit());
-
     function handleTemperatureUnitChange(event: Event) {
       const customEvent = event as CustomEvent<TemperatureUnit>;
 
@@ -98,7 +100,7 @@ function HeroWeather() {
 
   if (!weatherData) {
     return (
-      <div className="w-full flex flex-col gap-y-2 px-2">
+      <div className="flex w-full flex-col gap-y-2 px-2">
         <div className="flex items-center justify-end">
           <p>{city.name}</p>
         </div>
@@ -119,8 +121,11 @@ function HeroWeather() {
 
   const WeatherIcon = weather.icon;
 
+  const temperatureSuffix =
+    temperatureUnit === "fahrenheit" ? "F" : "C";
+
   return (
-    <div className="w-full flex flex-col gap-y-0.5 px-2">
+    <div className="flex w-full flex-col gap-y-0.5 px-2">
       {/* city */}
       <div className="flex items-center justify-end">
         <p>{city.name}</p>
@@ -128,21 +133,24 @@ function HeroWeather() {
 
       {/* temperature */}
       <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-0.5 items-center">
+        <div className="flex flex-col items-center gap-0.5">
           <p
             className="
-              xl:text-3xl
-              lg:text-2xl
               text-xl
               font-bold
+              lg:text-2xl
+              xl:text-3xl
             "
           >
             {toPersianNumber(
               Math.round(
-                convertTemperature(current.temperature_2m, temperatureUnit),
+                convertTemperature(
+                  current.temperature_2m,
+                  temperatureUnit,
+                ),
               ),
             )}
-            °{temperatureUnit === "fahrenheit" ? "F" : "C"}
+            °{temperatureSuffix}
           </p>
 
           <span>{weather.title}</span>
@@ -176,7 +184,7 @@ function HeroWeather() {
                 ),
               ),
             )}
-            °{temperatureUnit === "fahrenheit" ? "F" : "C"}
+            °{temperatureSuffix}
           </span>
         </div>
 
@@ -192,7 +200,7 @@ function HeroWeather() {
                 ),
               ),
             )}
-            °{temperatureUnit === "fahrenheit" ? "F" : "C"}
+            °{temperatureSuffix}
           </span>
         </div>
       </div>

@@ -7,7 +7,7 @@ interface PopularToolCardProps {
   description: string;
   href: string;
   isNew?: boolean;
-  pictior: any;
+  pictior: string;
 }
 
 function PopularToolCard({
@@ -35,44 +35,45 @@ function PopularToolCard({
           جدید
         </span>
       )}
+
       <div className="absolute inset-0">
         <Image
           src={pictior}
           alt={name}
           fill
           className="
-      object-cover
-      transition-transform
-      duration-500
-      group-hover:scale-105
-    "
+            object-cover
+            transition-transform
+            duration-500
+            group-hover:scale-105
+          "
         />
       </div>
+
       <div
         className="w-full absolute bottom-0 right-0 z-10 p-3 overflow-hidden
-      bg-linear-to-t
-      from-black/85
-      via-black/40
-      to-transparent
-      dark:from-black/90
-      dark:via-black/50
-      dark:to-transparent
-    "
+        bg-linear-to-t
+        from-black/85
+        via-black/40
+        to-transparent
+        dark:from-black/90
+        dark:via-black/50
+        dark:to-transparent"
       >
-        <div className="flex flex-col items-start  gap-4 mt-6">
+        <div className="flex flex-col items-start gap-4 mt-6">
           <div>
-            <h3 className="text-white  font-bold text-base">{name}</h3>
-            <p className="text-slate-300  text-sm mt-1">{description}</p>
+            <h3 className="text-white font-bold text-base">{name}</h3>
+            <p className="text-slate-300 text-sm mt-1">{description}</p>
           </div>
         </div>
 
         <div
           className="w-full flex items-center gap-1 mt-6 border border-white/10
- text-slate-100 text-sm font-medium
-         bg-white/10 rounded-xl px-3 py-2 group-hover:bg-white/15
-group-hover:border-purple-400/40
-group-hover:shadow-[0_0_25px_rgba(168,85,247,.18)] transition-all duration-300
-"
+          text-slate-100 text-sm font-medium
+          bg-white/10 rounded-xl px-3 py-2 group-hover:bg-white/15
+          group-hover:border-purple-400/40
+          group-hover:shadow-[0_0_25px_rgba(168,85,247,.18)]
+          transition-all duration-300"
         >
           <ChevronLeft size={16} />
           <span>استفاده کنید</span>

@@ -1,4 +1,3 @@
-// components/WorldClock.tsx
 "use client";
 
 import { toast } from "sonner";
@@ -16,7 +15,7 @@ interface Props {
 }
 
 export default function WorldClock({ clock }: Props) {
-  const { time, synced } = useWorldTime({
+  const { time } = useWorldTime({
     onError: (message) =>
       toast.error(`خطای اتصال برای ${clock.city}`, {
         description: message,
@@ -53,6 +52,7 @@ export default function WorldClock({ clock }: Props) {
       "
     >
       <h2 className="xl:text-2xl md:text-xl text-lg">{clock.flag}</h2>
+
       <div className="flex items-center gap-x-1">
         <h3 className="md:font-bold font-semibold">{clock.city}</h3>
         <span>-</span>

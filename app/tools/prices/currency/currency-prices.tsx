@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import {
   ArrowDown,
   ArrowUp,
@@ -8,6 +9,7 @@ import {
   RefreshCw,
   TrendingUp,
 } from "lucide-react";
+
 import { toPersianNumber } from "@/lib/number";
 import { useToolHistory } from "@/hooks/useToolHistory";
 
@@ -88,14 +90,22 @@ export default function CurrencyPrices() {
       const data: PricesResponse = await response.json();
 
       const filteredCurrencies = currencySymbols
-        .map((symbol) => data.currency?.find((item) => item.symbol === symbol))
-        .filter((item): item is CurrencyItem => Boolean(item));
+        .map((symbol) =>
+          data.currency?.find(
+            (item) => item.symbol === symbol,
+          ),
+        )
+        .filter(
+          (item): item is CurrencyItem => Boolean(item),
+        );
 
       setCurrencies(filteredCurrencies);
     } catch (error) {
       console.error("Currency Prices Error:", error);
 
-      setError("دریافت اطلاعات قیمت ارزها با مشکل مواجه شد.");
+      setError(
+        "دریافت اطلاعات قیمت ارزها با مشکل مواجه شد.",
+      );
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -103,14 +113,22 @@ export default function CurrencyPrices() {
   };
 
   useEffect(() => {
-    fetchPrices();
+    const timer = setTimeout(() => {
+      fetchPrices();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("fa-IR").format(price);
   };
 
-  const CurrencyCard = ({ item }: { item: CurrencyItem }) => {
+  const CurrencyCard = ({
+    item,
+  }: {
+    item: CurrencyItem;
+  }) => {
     const isPositive = item.change_percent > 0;
     const isNegative = item.change_percent < 0;
 
@@ -151,6 +169,7 @@ export default function CurrencyPrices() {
               ) : isNegative ? (
                 <ArrowDown className="size-3.5" />
               ) : null}
+
               {isPositive ? "+" : ""}
               {item.change_percent}%
             </div>
@@ -169,9 +188,13 @@ export default function CurrencyPrices() {
 
           {/* Footer */}
           <div className="mt-5 flex items-center justify-between border-t border-zinc-200/70 pt-3 text-xs dark:border-zinc-800">
-            <span className="text-zinc-500 dark:text-zinc-400">بروزرسانی</span>
+            <span className="text-zinc-500 dark:text-zinc-400">
+              بروزرسانی
+            </span>
 
-            <span className="font-medium">{toPersianNumber(item.time)}</span>
+            <span className="font-medium">
+              {toPersianNumber(item.time)}
+            </span>
           </div>
         </div>
       </div>
@@ -196,7 +219,9 @@ export default function CurrencyPrices() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-red-200 bg-red-50 p-10 text-center dark:border-red-900/50 dark:bg-red-950/20">
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p className="text-sm text-red-600 dark:text-red-400">
+          {error}
+        </p>
 
         <button
           type="button"
@@ -218,7 +243,9 @@ export default function CurrencyPrices() {
           <div className="flex items-center gap-2">
             <TrendingUp className="size-5 text-blue-500" />
 
-            <h2 className="text-lg font-bold">قیمت ارزها</h2>
+            <h2 className="text-lg font-bold">
+              قیمت ارزها
+            </h2>
           </div>
 
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
@@ -232,7 +259,12 @@ export default function CurrencyPrices() {
           disabled={refreshing}
           className="inline-flex w-fit items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800"
         >
-          <RefreshCw className={`size-4 ${refreshing ? "animate-spin" : ""}`} />
+          <RefreshCw
+            className={`size-4 ${
+              refreshing ? "animate-spin" : ""
+            }`}
+          />
+
           بروزرسانی
         </button>
       </div>
@@ -248,10 +280,15 @@ export default function CurrencyPrices() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {currencies
             .filter((item) =>
-              ["USD", "EUR", "GBP", "AED"].includes(item.symbol),
+              ["USD", "EUR", "GBP", "AED"].includes(
+                item.symbol,
+              ),
             )
             .map((item) => (
-              <CurrencyCard key={item.symbol} item={item} />
+              <CurrencyCard
+                key={item.symbol}
+                item={item}
+              />
             ))}
         </div>
       </section>
@@ -261,7 +298,9 @@ export default function CurrencyPrices() {
         <div className="mb-3 flex items-center gap-2">
           <Banknote className="size-4 text-blue-500" />
 
-          <h3 className="font-semibold">ارزهای پرکاربرد</h3>
+          <h3 className="font-semibold">
+            ارزهای پرکاربرد
+          </h3>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -280,7 +319,10 @@ export default function CurrencyPrices() {
               ].includes(item.symbol),
             )
             .map((item) => (
-              <CurrencyCard key={item.symbol} item={item} />
+              <CurrencyCard
+                key={item.symbol}
+                item={item}
+              />
             ))}
         </div>
       </section>
@@ -314,7 +356,10 @@ export default function CurrencyPrices() {
                 ].includes(item.symbol),
             )
             .map((item) => (
-              <CurrencyCard key={item.symbol} item={item} />
+              <CurrencyCard
+                key={item.symbol}
+                item={item}
+              />
             ))}
         </div>
       </section>

@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
 import { toPersianNumber } from "@/lib/number";
 import { useToolHistory } from "@/hooks/useToolHistory";
 
@@ -100,7 +99,11 @@ export default function CommodityPrices() {
   };
 
   useEffect(() => {
-    fetchPrices();
+    const timer = setTimeout(() => {
+      fetchPrices();
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
@@ -137,7 +140,9 @@ export default function CommodityPrices() {
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-base font-bold md:text-lg">قیمت کالاها</h2>
+          <h2 className="text-base font-bold md:text-lg">
+            قیمت کالاها
+          </h2>
 
           <p className="mt-1 text-xs leading-6 text-zinc-500 dark:text-zinc-400">
             آخرین قیمت کالاهای منتخب بازار و میزان تغییرات آن‌ها
@@ -152,9 +157,15 @@ export default function CommodityPrices() {
           disabled={refreshing}
           className="w-full sm:w-auto"
         >
-          <RefreshCw className={`size-4 ${refreshing ? "animate-spin" : ""}`} />
+          <RefreshCw
+            className={`size-4 ${
+              refreshing ? "animate-spin" : ""
+            }`}
+          />
 
-          {refreshing ? "در حال بروزرسانی..." : "بروزرسانی"}
+          {refreshing
+            ? "در حال بروزرسانی..."
+            : "بروزرسانی"}
         </Button>
       </div>
 
@@ -214,7 +225,9 @@ export default function CommodityPrices() {
                         </div>
 
                         <div>
-                          <p className="text-sm font-semibold">{item.name}</p>
+                          <p className="text-sm font-semibold">
+                            {item.name}
+                          </p>
 
                           <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                             واحد: {item.unit}
@@ -225,7 +238,10 @@ export default function CommodityPrices() {
                       {/* Information */}
                       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:min-w-130">
                         {/* Price */}
-                        <div className="text-right sm:text-left" dir="ltr">
+                        <div
+                          className="text-right sm:text-left"
+                          dir="ltr"
+                        >
                           <p className="text-xs text-zinc-500 dark:text-zinc-400">
                             قیمت
                           </p>
@@ -236,7 +252,10 @@ export default function CommodityPrices() {
                         </div>
 
                         {/* Change Value */}
-                        <div className="text-right sm:text-left" dir="ltr">
+                        <div
+                          className="text-right sm:text-left"
+                          dir="ltr"
+                        >
                           <p className="text-xs text-zinc-500 dark:text-zinc-400">
                             تغییر قیمت
                           </p>
@@ -272,7 +291,9 @@ export default function CommodityPrices() {
                                     : "text-zinc-500"
                               }`}
                             >
-                              {isPositive && <TrendingUp className="size-4" />}
+                              {isPositive && (
+                                <TrendingUp className="size-4" />
+                              )}
 
                               {isNegative && (
                                 <TrendingDown className="size-4" />
@@ -280,7 +301,10 @@ export default function CommodityPrices() {
 
                               <span>
                                 {isPositive ? "+" : ""}
-                                {formatNumber(item.change_percent)}%
+                                {formatNumber(
+                                  item.change_percent,
+                                )}
+                                %
                               </span>
                             </div>
                           </div>
@@ -288,6 +312,7 @@ export default function CommodityPrices() {
                           {/* Time */}
                           <div className="flex items-center gap-1.5 text-xs text-zinc-400 sm:hidden">
                             <Clock3 className="size-3.5" />
+
                             <span dir="ltr">{item.time}</span>
                           </div>
                         </div>

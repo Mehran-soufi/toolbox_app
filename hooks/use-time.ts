@@ -12,8 +12,6 @@ export default function useTime() {
   const [time, setTime] = useState<TimeData | null>(null);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
     const fetchTime = async () => {
       try {
         const res = await fetch("/api/time", {
@@ -30,11 +28,9 @@ export default function useTime() {
       }
     };
 
-
     fetchTime();
 
-
-    timer = setInterval(() => {
+    const timer = setInterval(() => {
       setTime((prev) => {
         if (!prev) return prev;
 
@@ -42,23 +38,19 @@ export default function useTime() {
         let minute = prev.minute;
         let hour = prev.hour;
 
-
         if (second >= 60) {
           second = 0;
           minute++;
         }
-
 
         if (minute >= 60) {
           minute = 0;
           hour++;
         }
 
-
         if (hour >= 24) {
           hour = 0;
         }
-
 
         return {
           hour,
@@ -68,11 +60,8 @@ export default function useTime() {
       });
     }, 1000);
 
-
     return () => clearInterval(timer);
-
   }, []);
-
 
   return time;
 }

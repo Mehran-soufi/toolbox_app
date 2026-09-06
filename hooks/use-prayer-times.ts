@@ -35,7 +35,7 @@ export function usePrayerTimes(cityCode = "1") {
         } else {
           setError(data.message);
         }
-      } catch (err) {
+      } catch {
         setError("خطا در دریافت اوقات شرعی");
       } finally {
         setLoading(false);

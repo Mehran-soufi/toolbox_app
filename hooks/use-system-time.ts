@@ -12,14 +12,16 @@ export function useSystemTime() {
   useEffect(() => {
     const fetchTime = async () => {
       try {
-        const response = await fetch("https://timeapi.io/api/v1/timezone/zone?timeZone=Asia%2FTehran");
-        
+        const response = await fetch(
+          "https://timeapi.io/api/v1/timezone/zone?timeZone=Asia%2FTehran",
+        );
+
         if (!response.ok) throw new Error("API unavailable");
-        
+
         const data: TimeResponse = await response.json();
         setDate(new Date(data.dateTime));
         setIsFallback(false);
-      } catch (err) {
+      } catch {
         console.warn("Using system time as fallback");
         setDate(new Date());
         setIsFallback(true);

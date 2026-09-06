@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import {
   MapPin,
   Thermometer,
@@ -17,12 +18,10 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
-
 import { cn } from "@/lib/utils";
 import { clearFavoriteTools, getFavoriteTools } from "@/lib/favorite-tools";
 import { toPersianNumber } from "@/lib/number";
 import { clearToolHistory, getToolHistory } from "@/lib/tool-history";
-
 import CitySelector from "@/app/tools/weather/city-selector";
 import { defaultCity as fallbackCity, type City } from "@/lib/cities";
 import { clearSavedCity, getSavedCity } from "@/lib/city-storage";
@@ -43,17 +42,12 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
 
   const [mounted, setMounted] = useState(false);
-
   const [selectedCity, setSelectedCity] = useState<City>(fallbackCity);
-
   const [temperatureUnit, setTemperatureUnit] =
     useState<TemperatureUnit>("celsius");
-
   const [favoriteCount, setFavoriteCount] = useState(0);
   const [historyCount, setHistoryCount] = useState(0);
-
   const [aboutOpen, setAboutOpen] = useState(false);
-
   const [contactOpen, setContactOpen] = useState(false);
 
   // ------------------------------------
@@ -61,38 +55,22 @@ export default function SettingsPage() {
   // ------------------------------------
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
 
-    const savedCity = getSavedCity();
+      const savedCity = getSavedCity();
 
-    if (savedCity) {
-      setSelectedCity(savedCity);
-    }
+      if (savedCity) {
+        setSelectedCity(savedCity);
+      }
 
-    setTemperatureUnit(getTemperatureUnit());
+      setTemperatureUnit(getTemperatureUnit());
+      setFavoriteCount(getFavoriteTools().length);
+      setHistoryCount(getToolHistory().length);
+    }, 0);
 
-    setFavoriteCount(getFavoriteTools().length);
-    setHistoryCount(getToolHistory().length);
+    return () => clearTimeout(timer);
   }, []);
-
-  // ------------------------------------
-  // Data counts
-  // ------------------------------------
-
-  const loadDataCounts = () => {
-    try {
-      const history = getToolHistory();
-      const favorites = getFavoriteTools();
-
-      setHistoryCount(history.length);
-      setFavoriteCount(favorites.length);
-    } catch (error) {
-      console.error("Error loading settings data:", error);
-
-      setHistoryCount(0);
-      setFavoriteCount(0);
-    }
-  };
 
   // ------------------------------------
   // City
@@ -124,9 +102,7 @@ export default function SettingsPage() {
 
   const handleClearHistory = () => {
     clearToolHistory();
-
     setHistoryCount(0);
-
     toast.success("تاریخچه ابزارها پاک شد");
   };
 
@@ -136,9 +112,7 @@ export default function SettingsPage() {
 
   const handleClearFavorites = () => {
     clearFavoriteTools();
-
     setFavoriteCount(0);
-
     toast.success("محبوب‌ها پاک شدند");
   };
 
@@ -195,7 +169,6 @@ export default function SettingsPage() {
   return (
     <main className="mx-auto w-full max-w-4xl px-3 pb-12">
       {/* Header */}
-
       <div className="mb-6 flex items-center gap-3">
         <div className="flex size-11 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-500">
           <Settings className="size-5" />
@@ -229,7 +202,10 @@ export default function SettingsPage() {
               </p>
             </div>
 
-            <CitySelector value={selectedCity} onChange={handleCityChange} />
+            <CitySelector
+              value={selectedCity}
+              onChange={handleCityChange}
+            />
           </div>
 
           {/* Temperature */}
@@ -292,7 +268,6 @@ export default function SettingsPage() {
             <div className="grid grid-cols-3 gap-2">
               {themeOptions.map((option) => {
                 const Icon = option.icon;
-
                 const active = theme === option.value;
 
                 return (
@@ -308,8 +283,9 @@ export default function SettingsPage() {
                     )}
                   >
                     <Icon className="size-5" />
-
-                    <span className="text-xs font-medium">{option.label}</span>
+                    <span className="text-xs font-medium">
+                      {option.label}
+                    </span>
                   </button>
                 );
               })}
@@ -434,9 +410,9 @@ export default function SettingsPage() {
             className="mt-4 flex w-full items-center justify-between rounded-xl border border-zinc-200 px-4 py-3 text-sm transition hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800"
           >
             <span>درباره جعبه ابزار</span>
-
             <ChevronLeft className="size-4 text-zinc-400" />
           </button>
+
           <button
             type="button"
             onClick={() => setContactOpen(true)}
@@ -447,7 +423,11 @@ export default function SettingsPage() {
           </button>
         </SettingsSection>
 
-        <AboutToolboxDialog open={aboutOpen} onOpenChange={setAboutOpen} />
+        <AboutToolboxDialog
+          open={aboutOpen}
+          onOpenChange={setAboutOpen}
+        />
+
         <ContactToolboxDialog
           open={contactOpen}
           onOpenChange={setContactOpen}
@@ -506,7 +486,12 @@ interface DataRowProps {
   action: React.ReactNode;
 }
 
-function DataRow({ icon: Icon, title, description, action }: DataRowProps) {
+function DataRow({
+  icon: Icon,
+  title,
+  description,
+  action,
+}: DataRowProps) {
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex min-w-0 items-center gap-3">

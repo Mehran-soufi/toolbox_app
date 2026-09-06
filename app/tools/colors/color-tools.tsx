@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  ChangeEvent,
-  DragEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
+import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import {
   Camera,
   Check,
@@ -19,23 +12,20 @@ import {
   Upload,
   X,
 } from "lucide-react";
-
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import {
   getPixelColor,
   hexToRgb,
   rgbToCss,
   rgbToHex,
-  rgbToHsl,
   rgbToHslCss,
   type RGB,
 } from "@/lib/color-tools";
 import { useToolHistory } from "@/hooks/useToolHistory";
+import Image from "next/image";
 
 type ColorHistoryItem = {
   id: string;
@@ -44,12 +34,11 @@ type ColorHistoryItem = {
 };
 
 export default function ColorTools() {
-
-        useToolHistory({
-            toolName: "تشخیص رنگ",
-            toolSlug: "color-tools",
-            toolIcon: "Palette",
-          });
+  useToolHistory({
+    toolName: "تشخیص رنگ",
+    toolSlug: "color-tools",
+    toolIcon: "Palette",
+  });
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,28 +48,18 @@ export default function ColorTools() {
   const animationRef = useRef<number | null>(null);
 
   const [hex, setHex] = useState("#8B5CF6");
-
   const [rgb, setRgb] = useState<RGB>({
     r: 139,
     g: 92,
     b: 246,
   });
-
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [cameraError, setCameraError] = useState("");
-
   const [imageUrl, setImageUrl] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
   const [isDragging, setIsDragging] = useState(false);
-
   const [copied, setCopied] = useState("");
-
   const [isLocked, setIsLocked] = useState(false);
-
   const [history, setHistory] = useState<ColorHistoryItem[]>([]);
-
-  // حالت‌های نشانگر روی عکس
   const [mousePosition, setMousePosition] = useState<{
     x: number;
     y: number;
@@ -90,15 +69,8 @@ export default function ColorTools() {
     y: 0,
     isVisible: false,
   });
-
-  // رنگ زیر نشانگر (پیش‌نمایش)
   const [hoverColor, setHoverColor] = useState<RGB | null>(null);
 
-  const hsl = rgbToHsl(rgb);
-
-  /**
-   * تغییر رنگ اصلی
-   */
   const updateColor = (newRgb: RGB) => {
     if (isLocked) return;
 
@@ -106,9 +78,6 @@ export default function ColorTools() {
     setHex(rgbToHex(newRgb));
   };
 
-  /**
-   * تغییر دستی HEX
-   */
   const handleColorInput = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.toUpperCase();
 
@@ -121,26 +90,9 @@ export default function ColorTools() {
     }
   };
 
-  /**
-   * انتخاب رنگ از Color Picker مرورگر
-   */
-  const handleNativeColorChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toUpperCase();
-
-    const parsed = hexToRgb(value);
-
-    if (parsed) {
-      updateColor(parsed);
-    }
-  };
-
-  /**
-   * کپی مقدار
-   */
   const copyValue = async (value: string, type: string, label: string) => {
     try {
       await navigator.clipboard.writeText(value);
-
       setCopied(type);
 
       toast.success(`${label} کپی شد`);
@@ -150,14 +102,10 @@ export default function ColorTools() {
       }, 1800);
     } catch (error) {
       console.error("Copy error:", error);
-
       toast.error("کپی کردن مقدار انجام نشد");
     }
   };
 
-  /**
-   * افزودن رنگ به تاریخچه
-   */
   const addToHistory = (newRgb: RGB) => {
     const newHex = rgbToHex(newRgb);
 
@@ -175,9 +123,6 @@ export default function ColorTools() {
     });
   };
 
-  /**
-   * ثابت کردن رنگ
-   */
   const toggleLock = () => {
     setIsLocked((previous) => {
       const next = !previous;
@@ -193,9 +138,6 @@ export default function ColorTools() {
     });
   };
 
-  /**
-   * شروع دوربین
-   */
   const startCamera = async () => {
     setCameraError("");
 
@@ -223,27 +165,21 @@ export default function ColorTools() {
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-
         await videoRef.current.play();
-
         setIsCameraActive(true);
-
         animationRef.current = requestAnimationFrame(scanCameraColor);
       }
     } catch (error) {
       console.error("Camera error:", error);
 
       setCameraError(
-        "دسترسی به دوربین امکان‌پذیر نیست. لطفاً دسترسی دوربین را بررسی کنید."
+        "دسترسی به دوربین امکان‌پذیر نیست. لطفاً دسترسی دوربین را بررسی کنید.",
       );
 
       setIsCameraActive(false);
     }
   };
 
-  /**
-   * توقف دوربین
-   */
   const stopCamera = () => {
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
@@ -263,9 +199,6 @@ export default function ColorTools() {
     setIsCameraActive(false);
   };
 
-  /**
-   * تشخیص رنگ از مرکز دوربین
-   */
   const scanCameraColor = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -276,7 +209,6 @@ export default function ColorTools() {
 
     if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
       animationRef.current = requestAnimationFrame(scanCameraColor);
-
       return;
     }
 
@@ -285,7 +217,6 @@ export default function ColorTools() {
 
     if (!width || !height) {
       animationRef.current = requestAnimationFrame(scanCameraColor);
-
       return;
     }
 
@@ -312,9 +243,6 @@ export default function ColorTools() {
     animationRef.current = requestAnimationFrame(scanCameraColor);
   };
 
-  /**
-   * انتخاب فایل
-   */
   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
@@ -323,9 +251,6 @@ export default function ColorTools() {
     processImage(file);
   };
 
-  /**
-   * پردازش فایل تصویر
-   */
   const processImage = (file: File) => {
     if (!file.type.startsWith("image/")) {
       toast.error("لطفاً یک فایل تصویری انتخاب کنید");
@@ -342,51 +267,33 @@ export default function ColorTools() {
 
     const url = URL.createObjectURL(file);
 
-    setImageFile(file);
     setImageUrl(url);
 
     toast.success("تصویر با موفقیت انتخاب شد");
   };
 
-  /**
-   * Drag Enter
-   */
   const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-
     setIsDragging(true);
   };
 
-  /**
-   * Drag Leave
-   */
   const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-
     setIsDragging(false);
   };
 
-  /**
-   * Drag Over
-   */
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-
     event.dataTransfer.dropEffect = "copy";
-
     setIsDragging(true);
   };
 
-  /**
-   * Drop
-   */
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-
     setIsDragging(false);
 
     const file = event.dataTransfer.files?.[0];
@@ -396,27 +303,24 @@ export default function ColorTools() {
     processImage(file);
   };
 
-  /**
-   * حذف تصویر
-   */
   const clearImage = () => {
     if (imageUrl) {
       URL.revokeObjectURL(imageUrl);
     }
 
     setImageUrl("");
-    setImageFile(null);
     setHoverColor(null);
-    setMousePosition({ x: 0, y: 0, isVisible: false });
+    setMousePosition({
+      x: 0,
+      y: 0,
+      isVisible: false,
+    });
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  /**
-   * حرکت موس روی تصویر
-   */
   const handleImageMouseMove = (event: React.MouseEvent<HTMLImageElement>) => {
     if (!imageCanvasRef.current || !imageUrl) {
       return;
@@ -425,12 +329,19 @@ export default function ColorTools() {
     const image = event.currentTarget;
     const rect = image.getBoundingClientRect();
 
-    // محاسبه موقعیت موس نسبت به تصویر
     const x = ((event.clientX - rect.left) / rect.width) * image.naturalWidth;
+
     const y = ((event.clientY - rect.top) / rect.height) * image.naturalHeight;
 
-    const clampedX = Math.max(0, Math.min(image.naturalWidth - 1, Math.floor(x)));
-    const clampedY = Math.max(0, Math.min(image.naturalHeight - 1, Math.floor(y)));
+    const clampedX = Math.max(
+      0,
+      Math.min(image.naturalWidth - 1, Math.floor(x)),
+    );
+
+    const clampedY = Math.max(
+      0,
+      Math.min(image.naturalHeight - 1, Math.floor(y)),
+    );
 
     setMousePosition({
       x: event.clientX - rect.left,
@@ -438,8 +349,8 @@ export default function ColorTools() {
       isVisible: true,
     });
 
-    // تشخیص رنگ زیر موس
     const canvas = imageCanvasRef.current;
+
     const context = canvas.getContext("2d", {
       willReadFrequently: true,
     });
@@ -452,20 +363,20 @@ export default function ColorTools() {
     context.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight);
 
     const color = getPixelColor(context, clampedX, clampedY);
+
     setHoverColor(color);
   };
 
-  /**
-   * خروج موس از تصویر
-   */
   const handleImageMouseLeave = () => {
-    setMousePosition({ x: 0, y: 0, isVisible: false });
+    setMousePosition({
+      x: 0,
+      y: 0,
+      isVisible: false,
+    });
+
     setHoverColor(null);
   };
 
-  /**
-   * کلیک روی تصویر برای انتخاب رنگ
-   */
   const handleImageClick = (event: React.MouseEvent<HTMLImageElement>) => {
     if (!imageCanvasRef.current || !imageUrl) {
       return;
@@ -500,12 +411,13 @@ export default function ColorTools() {
     const rect = image.getBoundingClientRect();
 
     const x = ((event.clientX - rect.left) / rect.width) * naturalWidth;
+
     const y = ((event.clientY - rect.top) / rect.height) * naturalHeight;
 
     const color = getPixelColor(
       context,
       Math.max(0, Math.min(naturalWidth - 1, Math.floor(x))),
-      Math.max(0, Math.min(naturalHeight - 1, Math.floor(y)))
+      Math.max(0, Math.min(naturalHeight - 1, Math.floor(y))),
     );
 
     updateColor(color);
@@ -513,37 +425,23 @@ export default function ColorTools() {
     toast.success(`رنگ ${rgbToHex(color)} انتخاب شد`);
   };
 
-  /**
-   * انتخاب رنگ از تاریخچه
-   */
   const selectHistoryColor = (item: ColorHistoryItem) => {
     setRgb(item.rgb);
     setHex(item.hex);
-
     setIsLocked(false);
 
     toast.success("رنگ از تاریخچه انتخاب شد");
   };
 
-  /**
-   * حذف یک رنگ از تاریخچه
-   */
   const removeHistoryColor = (id: string) => {
     setHistory((previous) => previous.filter((item) => item.id !== id));
   };
 
-  /**
-   * پاک کردن تاریخچه
-   */
   const clearHistory = () => {
     setHistory([]);
-
     toast.success("تاریخچه رنگ‌ها پاک شد");
   };
 
-  /**
-   * Cleanup
-   */
   useEffect(() => {
     return () => {
       if (animationRef.current) {
@@ -560,9 +458,7 @@ export default function ColorTools() {
 
   return (
     <div className="w-full space-y-6">
-      {/* Main Tools */}
       <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Color Information */}
         <div className="rounded-2xl border border-zinc-200/70 bg-white/60 p-5 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/50">
           <div className="mb-5 flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-xl bg-violet-500/10 text-violet-500">
@@ -570,9 +466,7 @@ export default function ColorTools() {
             </div>
 
             <div>
-              <h2 className="text-base font-bold md:text-lg">
-                اطلاعات رنگ
-              </h2>
+              <h2 className="text-base font-bold md:text-lg">اطلاعات رنگ</h2>
 
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                 مشخصات رنگ انتخاب‌شده را مشاهده و کپی کنید.
@@ -580,7 +474,6 @@ export default function ColorTools() {
             </div>
           </div>
 
-          {/* Preview */}
           <div
             className="mb-5 h-40 w-full rounded-2xl border border-zinc-200 shadow-inner dark:border-zinc-800"
             style={{
@@ -588,7 +481,6 @@ export default function ColorTools() {
             }}
           />
 
-          {/* HEX */}
           <div className="space-y-2">
             <Label htmlFor="hex-color">HEX</Label>
 
@@ -618,7 +510,6 @@ export default function ColorTools() {
             </div>
           </div>
 
-          {/* RGB / HSL */}
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <ColorValue
               label="RGB"
@@ -635,18 +526,14 @@ export default function ColorTools() {
             />
           </div>
 
-          {/* RGB Values */}
           <div className="mt-4 rounded-xl bg-zinc-50 p-4 dark:bg-zinc-950/50">
             <div className="grid grid-cols-3 gap-3 text-center">
               <ColorNumber label="R" value={rgb.r} />
-
               <ColorNumber label="G" value={rgb.g} />
-
               <ColorNumber label="B" value={rgb.b} />
             </div>
           </div>
 
-          {/* Lock */}
           <Button
             type="button"
             variant={isLocked ? "default" : "outline"}
@@ -667,7 +554,6 @@ export default function ColorTools() {
           </Button>
         </div>
 
-        {/* Camera + Image */}
         <div className="rounded-2xl border border-zinc-200/70 bg-white/60 p-5 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/50">
           <div className="mb-5 flex items-center gap-3">
             <div className="flex size-11 items-center justify-center rounded-xl bg-violet-500/10 text-violet-500">
@@ -675,9 +561,7 @@ export default function ColorTools() {
             </div>
 
             <div>
-              <h2 className="text-base font-bold md:text-lg">
-                تشخیص رنگ
-              </h2>
+              <h2 className="text-base font-bold md:text-lg">تشخیص رنگ</h2>
 
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                 با دوربین یا تصویر، رنگ موردنظر را انتخاب کنید.
@@ -685,9 +569,7 @@ export default function ColorTools() {
             </div>
           </div>
 
-          {/* نمایش دوربین یا تصویر */}
           <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-black dark:border-zinc-800">
-            {/* دوربین */}
             <video
               ref={videoRef}
               muted
@@ -697,22 +579,22 @@ export default function ColorTools() {
               }`}
             />
 
-            {/* تصویر آپلود شده */}
             {imageUrl && (
               <div className="relative aspect-video w-full">
-                <img
+                <Image
                   src={imageUrl}
                   alt="تصویر انتخاب‌شده برای تشخیص رنگ"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   onClick={handleImageClick}
                   onMouseMove={handleImageMouseMove}
                   onMouseLeave={handleImageMouseLeave}
-                  className="h-full w-full cursor-crosshair object-contain bg-zinc-950"
+                  className="cursor-crosshair object-contain bg-zinc-950"
                 />
 
-                {/* نشانگر موس */}
                 {mousePosition.isVisible && hoverColor && (
                   <>
-                    {/* مربع نشانگر */}
                     <div
                       className="pointer-events-none absolute z-10"
                       style={{
@@ -722,16 +604,15 @@ export default function ColorTools() {
                         height: 50,
                         border: "2px solid white",
                         borderRadius: "4px",
-                        boxShadow: "0 0 0 1px rgba(0,0,0,0.3), 0 0 20px rgba(0,0,0,0.5)",
+                        boxShadow:
+                          "0 0 0 1px rgba(0,0,0,0.3), 0 0 20px rgba(0,0,0,0.5)",
                         background: "transparent",
                         transform: "translate(-50%, -50%)",
                       }}
                     >
-                      {/* خطوط کراس‌هیر */}
                       <div className="absolute left-1/2 top-0 h-full w-px bg-white/60" />
                       <div className="absolute left-0 top-1/2 h-px w-full bg-white/60" />
 
-                      {/* نقطه مرکزی */}
                       <div
                         className="absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white"
                         style={{
@@ -740,7 +621,6 @@ export default function ColorTools() {
                         }}
                       />
 
-                      {/* برچسب رنگ */}
                       <div
                         className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md px-2 py-0.5 text-[10px] font-bold text-white"
                         style={{
@@ -752,7 +632,6 @@ export default function ColorTools() {
                       </div>
                     </div>
 
-                    {/* دایره بزرگتر برای افکت */}
                     <div
                       className="pointer-events-none absolute z-0 rounded-full border border-white/20"
                       style={{
@@ -762,7 +641,9 @@ export default function ColorTools() {
                         height: 100,
                         transform: "translate(-50%, -50%)",
                         boxShadow: "0 0 40px rgba(0,0,0,0.3)",
-                        background: `radial-gradient(circle, ${rgbToHex(hoverColor)}33 0%, transparent 70%)`,
+                        background: `radial-gradient(circle, ${rgbToHex(
+                          hoverColor,
+                        )}33 0%, transparent 70%)`,
                       }}
                     />
                   </>
@@ -770,7 +651,6 @@ export default function ColorTools() {
               </div>
             )}
 
-            {/* حالت پیش‌فرض (هیچکدام فعال نیست) */}
             {!isCameraActive && !imageUrl && (
               <div
                 onDragEnter={handleDragEnter}
@@ -799,7 +679,9 @@ export default function ColorTools() {
                 </div>
 
                 <p className="text-sm font-medium text-white">
-                  {isDragging ? "تصویر را اینجا رها کنید" : "برای شروع کلیک کنید"}
+                  {isDragging
+                    ? "تصویر را اینجا رها کنید"
+                    : "برای شروع کلیک کنید"}
                 </p>
 
                 <p className="mt-1 max-w-xs text-xs leading-5 text-zinc-400">
@@ -810,7 +692,6 @@ export default function ColorTools() {
               </div>
             )}
 
-            {/* نشانگر مرکز - فقط برای دوربین */}
             {isCameraActive && (
               <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                 <div className="relative size-14 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,.4)]">
@@ -819,7 +700,6 @@ export default function ColorTools() {
               </div>
             )}
 
-            {/* دکمه حذف تصویر روی تصویر */}
             {imageUrl && (
               <button
                 type="button"
@@ -832,9 +712,9 @@ export default function ColorTools() {
           </div>
 
           <canvas ref={canvasRef} className="hidden" />
+
           <canvas ref={imageCanvasRef} className="hidden" />
 
-          {/* دکمه‌های کنترل */}
           <div className="mt-4 flex flex-wrap gap-2">
             {!isCameraActive ? (
               <Button
@@ -870,7 +750,6 @@ export default function ColorTools() {
             </Button>
           </div>
 
-          {/* توضیحات */}
           {imageUrl && (
             <div className="mt-3 rounded-xl bg-violet-50 px-4 py-2 text-center text-xs text-violet-700 dark:bg-violet-950/30 dark:text-violet-300">
               💡 روی هر نقطه از تصویر کلیک کنید تا رنگ آن نقطه انتخاب شود.
@@ -889,14 +768,11 @@ export default function ColorTools() {
         </div>
       </div>
 
-      {/* History */}
       {history.length > 0 && (
         <div className="rounded-2xl border border-zinc-200/70 bg-white/60 p-5 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/50">
           <div className="mb-5 flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold md:text-lg">
-                تاریخچه رنگ‌ها
-              </h2>
+              <h2 className="text-base font-bold md:text-lg">تاریخچه رنگ‌ها</h2>
 
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                 رنگ‌های انتخاب‌شده اخیر

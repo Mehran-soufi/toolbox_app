@@ -215,7 +215,7 @@ export default function ImageConverter() {
       return;
     }
 
-    let targetWidth = Math.min(value, dimensions.width);
+    const targetWidth = Math.min(value, dimensions.width);
 
     let targetHeight = Math.round(
       (targetWidth / dimensions.width) * dimensions.height,

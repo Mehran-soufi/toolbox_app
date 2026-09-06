@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import {
   Check,
@@ -115,12 +115,11 @@ const initialFormData: FormData = {
 };
 
 export default function QRGenerator() {
-
-    useToolHistory({
-      toolName: "تولید QR Code",
-      toolSlug: "qr-generator",
-      toolIcon: "QrCode",
-    });
+  useToolHistory({
+    toolName: "تولید QR Code",
+    toolSlug: "qr-generator",
+    toolIcon: "QrCode",
+  });
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -231,7 +230,7 @@ export default function QRGenerator() {
 
   const qrContent = generateContent();
 
-  const generateQR = async () => {
+  const generateQR = useCallback(async () => {
     if (!canvasRef.current || !qrContent) {
       setGenerated(false);
       return;
@@ -243,13 +242,12 @@ export default function QRGenerator() {
         margin: 2,
         errorCorrectionLevel: "M",
       });
-
       setGenerated(true);
     } catch (error) {
       console.error("QR generation error:", error);
       setGenerated(false);
     }
-  };
+  }, [qrContent]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -257,7 +255,7 @@ export default function QRGenerator() {
     }, 200);
 
     return () => clearTimeout(timeout);
-  }, [qrContent]);
+  }, [qrContent, generateQR]);
 
   const handleDownload = () => {
     if (!canvasRef.current || !generated) return;
