@@ -1,9 +1,14 @@
-import clockImg from "@/assets/toolbox_img/clock.png";
-import calcImg from "@/assets/toolbox_img/calculator.png";
-import gold from "@/assets/toolbox_img/gold.png";
-import health from "@/assets/toolbox_img/health.png";
-import age from "@/assets/toolbox_img/age.png";
-import currency from "@/assets/toolbox_img/currency.png";
+import clockImg from "@/assets/toolbox_img/clock.webp";
+import calcImg from "@/assets/toolbox_img/calculator.webp";
+import gold from "@/assets/toolbox_img/gold.webp";
+import health from "@/assets/toolbox_img/health.webp";
+import currency from "@/assets/toolbox_img/currency.webp";
+import stopwatch from "@/assets/toolbox_img/stopwatch.webp";
+import weather from "@/assets/toolbox_img/weather.webp";
+import calendar from "@/assets/toolbox_img/calendar.webp";
+import qr from "@/assets/toolbox_img/qr.webp";
+import unit from "@/assets/toolbox_img/unit-converted.webp";
+import percentage from "@/assets/toolbox_img/percentage.webp";
 
 export const popularTools = [
   {
@@ -16,12 +21,30 @@ export const popularTools = [
   },
 
   {
-    id: "stopwatch",
-    name: "کرنومتر",
-    description: "اندازه‌گیری دقیق زمان",
-    href: "/tools/stopwatch",
-    isNew: true,
-    pictior: clockImg,
+    id: "weather",
+    name: "هواشناسی",
+    description: "مشاهده وضعیت فعلی و پیش‌بینی آب‌وهوا",
+    href: "/tools/weather",
+    isNew: false,
+    pictior: weather,
+  },
+
+  {
+    id: "prices",
+    name: "قیمت‌ها",
+    description: "قیمت لحظه‌ای ارز، طلا و ارز دیجیتال",
+    href: "/tools/prices",
+    isNew: false,
+    pictior: gold,
+  },
+
+  {
+    id: "unit-converter",
+    name: "تبدیل واحد",
+    description: "تبدیل سریع انواع واحدها",
+    href: "/tools/unit-converter",
+    isNew: false,
+    pictior: unit,
   },
 
   {
@@ -34,30 +57,39 @@ export const popularTools = [
   },
 
   {
-    id: "unit-converter",
-    name: "تبدیل واحد",
-    description: "تبدیل سریع انواع واحدها",
-    href: "/tools/unit-converter",
+    id: "calendar",
+    name: "تقویم",
+    description: "نمایش تقویم و مناسبت‌ها",
+    href: "/tools/calendar",
     isNew: false,
-    pictior: calcImg,
+    pictior: calendar,
+  },
+
+  {
+    id: "stopwatch",
+    name: "کرنومتر",
+    description: "اندازه‌گیری دقیق زمان",
+    href: "/tools/stopwatch",
+    isNew: true,
+    pictior: stopwatch,
   },
 
   {
     id: "percentage",
-    name: "قیمت طلا",
-    description: "قیمت لحظه ای طلا",
-    href: "/tools/gold-price",
+    name: "محاسبه درصد",
+    description: "محاسبه سریع درصد و تخفیف",
+    href: "/tools/percentage",
     isNew: false,
-    pictior: gold,
+    pictior: percentage,
   },
 
   {
-    id: "age-calculator",
-    name: "قیمت ارز",
-    description: "قیمت دقیق و لحظه ای ارز",
-    href: "/tools/age-calculator",
-    isNew: false,
-    pictior: currency,
+    id: "bmi-calculator",
+    name: "محاسبه BMI",
+    description: "محاسبه شاخص توده بدنی",
+    href: "/tools/bmi-calculator",
+    isNew: true,
+    pictior: health,
   },
 
   {
@@ -66,15 +98,24 @@ export const popularTools = [
     description: "محاسبه فاصله بین تاریخ‌ها",
     href: "/tools/date-calculator",
     isNew: false,
-    pictior: clockImg,
+    pictior: calendar,
   },
 
   {
-    id: "bmi-calculator",
-    name: "محاسبه BMI",
-    description: "بررسی شاخص توده بدنی",
-    href: "/tools/bmi-calculator",
-    isNew: true,
-    pictior: health,
+    id: "currency-prices",
+    name: "قیمت ارز",
+    description: "قیمت دقیق و لحظه‌ای ارز",
+    href: "/tools/prices-currency",
+    isNew: false,
+    pictior: currency,
+  },
+
+  {
+    id: "qr-generator",
+    name: "تولید QR Code",
+    description: "ساخت سریع کد QR",
+    href: "/tools/qr-generator",
+    isNew: false,
+    pictior: qr,
   },
 ];

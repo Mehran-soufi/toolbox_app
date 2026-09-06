@@ -77,7 +77,7 @@ function PopularToolsSection() {
             xl:grid-cols-4
           "
         >
-          {popularTools.map((tool) => (
+          {popularTools.slice(0,8).map((tool) => (
             <PopularToolCard key={tool.id} {...tool} />
           ))}
         </div>
