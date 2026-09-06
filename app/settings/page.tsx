@@ -23,7 +23,7 @@ import { clearFavoriteTools, getFavoriteTools } from "@/lib/favorite-tools";
 import { toPersianNumber } from "@/lib/number";
 import { clearToolHistory, getToolHistory } from "@/lib/tool-history";
 
-import CitySelector from "../../app/tools/weather/city-selector";
+import CitySelector from "@/app/tools/weather/city-selector";
 import { defaultCity as fallbackCity, type City } from "@/lib/cities";
 import { clearSavedCity, getSavedCity } from "@/lib/city-storage";
 import {
@@ -416,7 +416,7 @@ export default function SettingsPage() {
               <p className="text-sm font-medium">نسخه جعبه ابزار</p>
 
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                اطلاعات بیشتر درباره امکانات و تکنولوژی‌های پروژه
+               اطلاعات بیشتر درباره امکانات و جعبه ابزار
               </p>
             </div>
 
