@@ -179,7 +179,7 @@ export default function ToolSearch({ visible = true }: ToolSearchProps) {
             <div
               ref={mobilePanelRef}
               className={cn(
-                "fixed inset-x-3 top-16 z-100",
+                "fixed inset-x-3 top-16 z-100 lg:hidden",
                 "rounded-2xl border p-3",
                 "border-zinc-200 bg-white/95",
                 "shadow-[0_12px_40px_rgba(0,0,0,0.12)]",
