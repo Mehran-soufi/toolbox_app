@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
 
@@ -18,6 +19,7 @@ export default function ToolSearch({ visible = true }: ToolSearchProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const desktopInputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
+  const mobilePanelRef = useRef<HTMLDivElement>(null);
 
   const filteredTools =
     query.trim().length > 0
@@ -29,12 +31,16 @@ export default function ToolSearch({ visible = true }: ToolSearchProps) {
   /* بستن با کلیک بیرون */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+
       if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        containerRef.current?.contains(target) ||
+        mobilePanelRef.current?.contains(target)
       ) {
-        setIsOpen(false);
+        return;
       }
+
+      setIsOpen(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -167,76 +173,77 @@ export default function ToolSearch({ visible = true }: ToolSearchProps) {
 
         {/* Mobile Search Panel */}
 
-        {isOpen && (
-          <div
-            className={cn(
-              "fixed inset-x-3 top-[calc(100%+8px)] z-100",
-              "w-auto",
-              "rounded-2xl border p-3",
-              "border-zinc-200 bg-white/95",
-              "shadow-[0_12px_40px_rgba(0,0,0,0.12)]",
-              "backdrop-blur-xl",
-              "dark:border-zinc-800 dark:bg-zinc-900/95",
-              "dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)]",
-            )}
-          >
-            {/* Input */}
-
+        {isOpen &&
+          typeof document !== "undefined" &&
+          createPortal(
             <div
+              ref={mobilePanelRef}
               className={cn(
-                "flex h-12 items-center gap-2 rounded-xl border px-3",
-                "border-zinc-200 bg-zinc-50",
-                "dark:border-zinc-700 dark:bg-zinc-800/70",
-                "focus-within:border-violet-400",
-                "focus-within:ring-2 focus-within:ring-violet-500/10",
+                "fixed inset-x-3 top-16 z-100",
+                "rounded-2xl border p-3",
+                "border-zinc-200 bg-white/95",
+                "shadow-[0_12px_40px_rgba(0,0,0,0.12)]",
+                "backdrop-blur-xl",
+                "dark:border-zinc-800 dark:bg-zinc-900/95",
+                "dark:shadow-[0_12px_40px_rgba(0,0,0,0.35)]",
               )}
             >
-              <Search className="size-4 shrink-0 text-zinc-400" />
+              {/* Input */}
+              <div
+                className={cn(
+                  "flex h-12 w-full items-center gap-2 rounded-xl border px-3",
+                  "border-zinc-200 bg-zinc-50",
+                  "dark:border-zinc-700 dark:bg-zinc-800/70",
+                  "focus-within:border-violet-400",
+                  "focus-within:ring-2 focus-within:ring-violet-500/10",
+                )}
+              >
+                <Search className="size-4 shrink-0 text-zinc-400" />
 
-              <input
-                ref={mobileInputRef}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="نام ابزار را جستجو کنید..."
-                className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-zinc-400"
-                aria-label="جستجوی ابزار"
-              />
+                <input
+                  ref={mobileInputRef}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="نام ابزار را جستجو کنید..."
+                  className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-zinc-400"
+                  aria-label="جستجوی ابزار"
+                />
 
-              {query && (
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setQuery("");
+                      mobileInputRef.current?.focus();
+                    }}
+                    className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-200 dark:hover:bg-zinc-700"
+                    aria-label="پاک کردن"
+                  >
+                    <X className="size-4" />
+                  </button>
+                )}
+
                 <button
                   type="button"
-                  onClick={() => {
-                    setQuery("");
-                    mobileInputRef.current?.focus();
-                  }}
-                  className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                  aria-label="پاک کردن"
+                  onClick={handleClose}
+                  className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
+                  aria-label="بستن جستجو"
                 >
                   <X className="size-4" />
                 </button>
+              </div>
+
+              {/* Results */}
+              {query.trim() && (
+                <SearchResults
+                  results={filteredTools}
+                  onSelect={handleClose}
+                  mobile
+                />
               )}
-
-              <button
-                type="button"
-                onClick={handleClose}
-                className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-700 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
-                aria-label="بستن جستجو"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-
-            {/* Results */}
-
-            {query.trim() && (
-              <SearchResults
-                results={filteredTools}
-                onSelect={handleClose}
-                mobile
-              />
-            )}
-          </div>
-        )}
+            </div>,
+            document.body,
+          )}
       </div>
     </div>
   );
