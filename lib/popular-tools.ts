@@ -9,6 +9,7 @@ import calendar from "@/assets/toolbox_img/calendar.webp";
 import qr from "@/assets/toolbox_img/qr.webp";
 import unit from "@/assets/toolbox_img/unit-converted.webp";
 import percentage from "@/assets/toolbox_img/percentage.webp";
+import dateCalculator from "@/assets/toolbox_img/date-calculator.webp";
 
 export const popularTools = [
   {
@@ -98,7 +99,7 @@ export const popularTools = [
     description: "محاسبه فاصله بین تاریخ‌ها",
     href: "/tools/date-calculator",
     isNew: false,
-    pictior: calendar,
+    pictior: dateCalculator,
   },
 
   {
