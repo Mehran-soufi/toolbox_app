@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 
 interface PopularToolCardProps {
   name: string;
   description: string;
   href: string;
   isNew?: boolean;
-  pictior: string;
+  pictior: string | StaticImageData;
 }
 
 function PopularToolCard({
