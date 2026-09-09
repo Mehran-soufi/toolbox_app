@@ -33,6 +33,9 @@ interface JalaliCalendarProps {
   yearsList: number[];
   isShowingToday: boolean;
   holidayDates: string[];
+  selectedDayEvents: CalendarEvent[];
+  isLoading: boolean;
+  hasError: boolean;
   getEventsForDay: (date: Date) => CalendarEvent[];
 }
 
