@@ -118,6 +118,8 @@ export default function RootLayout({
       className={`${vazirmatn.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <link rel="manifest" href="/manifest.webmanifest" />
+
       <body className="max-w-full min-h-screen bg-background text-foreground">
         <ScrollToTop />
         <div className="fixed inset-0 -z-50 overflow-hidden">
