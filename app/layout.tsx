@@ -30,7 +30,7 @@ export const vazirmatn = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://tlbbox-app.vercel.app"),
+  metadataBase: new URL("https://toolbox-app.mehransoufi33.workers.dev/"),
 
   title: {
     default: "جعبه ابزار | ابزارهای آنلاین کاربردی",
