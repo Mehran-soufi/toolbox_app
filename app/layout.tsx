@@ -2,15 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider } from "./provider/theme-provider";
 import "./globals.css";
-import NavigationProgress from "@/components/shared/navigation-progress";
-import AppSidebar from "@/components/shared/app-sidebar";
-import Footer from "@/components/layout/footer";
-import Header from "@/components/layout/header";
-import BottomNav from "@/components/shared/bottom-nav";
-import PageTransition from "@/components/shared/page-transition";
-import { Toaster } from "@/components/ui/sonner";
 import ScrollToTop from "@/components/layout/scroll-to-top";
-
 import ServiceWorkerRegister from "@/app/pwa/service-worker-register";
 
 export const vazirmatn = localFont({
@@ -126,69 +118,53 @@ export default function RootLayout({
         <ServiceWorkerRegister />
 
         <ScrollToTop />
+
         <div className="fixed inset-0 -z-50 overflow-hidden">
           {/* Top Left Glow */}
           <div
-            className="glow-primary
-      absolute
-      -top-56
-      -left-56
-      h-162.5
-      w-162.5
-      rounded-full
-
-      bg-violet-600/20
-      dark:bg-violet-500/25
-
-      blur-[160px]
-      "
+            className="
+              glow-primary
+              absolute
+              -top-56
+              -left-56
+              h-162.5
+              w-162.5
+              rounded-full
+              bg-violet-600/20
+              dark:bg-violet-500/25
+              blur-[160px]
+            "
           />
 
           {/* Bottom Right Glow */}
           <div
-            className="glow-secondary
-      absolute
-      -bottom-62.5
-      -right-62.5
-      h-150
-      w-150
-      rounded-full
-
-      bg-fuchsia-500/10
-      dark:bg-fuchsia-600/15
-
-      blur-[170px]
-      "
+            className="
+              glow-secondary
+              absolute
+              -bottom-62.5
+              -right-62.5
+              h-150
+              w-150
+              rounded-full
+              bg-fuchsia-500/10
+              dark:bg-fuchsia-600/15
+              blur-[170px]
+            "
           />
 
-          {/* Very low noise*/}
+          {/* Very low noise */}
           <div
             className="
-    absolute
-    inset-0
-
-    opacity-[0.025]
-
-    bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]
-    bg-size-[48px_48px]
-  "
+              absolute
+              inset-0
+              opacity-[0.025]
+              bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)]
+              bg-size-[48px_48px]
+            "
           />
         </div>
-        <ThemeProvider>
-          <div className="flex">
-            <AppSidebar />
-            <div className="w-full flex-1 flex flex-col gap-y-2 min-h-screen">
-              <div className="w-11/12 mx-auto flex-1 md:pb-0 flex flex-col gap-y-2">
-                <Header />
-                <NavigationProgress />
-                <PageTransition>{children}</PageTransition>
-                <Toaster position="top-center" richColors />
-                <Footer />
-              </div>
-            </div>
-          </div>
-          <BottomNav />
-        </ThemeProvider>
+
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

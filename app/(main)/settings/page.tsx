@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { clearFavoriteTools, getFavoriteTools } from "@/lib/favorite-tools";
 import { toPersianNumber } from "@/lib/number";
 import { clearToolHistory, getToolHistory } from "@/lib/tool-history";
-import CitySelector from "@/app/tools/weather/city-selector";
+
 import { defaultCity as fallbackCity, type City } from "@/lib/cities";
 import { clearSavedCity, getSavedCity } from "@/lib/city-storage";
 import {
@@ -33,6 +33,7 @@ import {
 } from "@/lib/temperature-storage";
 import AboutToolboxDialog from "./about-toolbox-dialog";
 import ContactToolboxDialog from "./contact-toolbox-dialog";
+import CitySelector from "../tools/weather/city-selector";
 
 // ------------------------------------
 // Page

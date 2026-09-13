@@ -21,7 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import MetroLineBadge from "@/app/tools/metro/MetroLineBadge";
+import MetroLineBadge from "@/app/(main)/tools/metro/MetroLineBadge";
 
 interface StationSelectProps {
   value: string;
