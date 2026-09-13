@@ -11,6 +11,8 @@ import PageTransition from "@/components/shared/page-transition";
 import { Toaster } from "@/components/ui/sonner";
 import ScrollToTop from "@/components/layout/scroll-to-top";
 
+import ServiceWorkerRegister from "@/app/pwa/service-worker-register";
+
 export const vazirmatn = localFont({
   src: [
     {
@@ -121,6 +123,8 @@ export default function RootLayout({
       <link rel="manifest" href="/manifest.webmanifest" />
 
       <body className="max-w-full min-h-screen bg-background text-foreground">
+        <ServiceWorkerRegister />
+
         <ScrollToTop />
         <div className="fixed inset-0 -z-50 overflow-hidden">
           {/* Top Left Glow */}
