@@ -1,14 +1,18 @@
-const CACHE_NAME = "toolbox-v1";
+const CACHE_NAME = "toolbox-v3";
+
+const OFFLINE_URL = "/offline";
+
+const STATIC_ASSETS = [
+  OFFLINE_URL,
+  "/icon-192.png",
+  "/font/vazirmatn/Vazirmatn-Regular.ttf",
+  "/font/vazirmatn/Vazirmatn-Black.ttf",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        "/offline.html",
-        "/icon-192.png",
-        "/font/vazirmatn/Vazirmatn-Regular.ttf",
-        "/font/vazirmatn/Vazirmatn-Black.ttf",
-      ]);
+      return cache.addAll(STATIC_ASSETS);
     }),
   );
 
@@ -16,17 +20,52 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames
+            .filter((cacheName) => cacheName !== CACHE_NAME)
+            .map((cacheName) => caches.delete(cacheName)),
+        );
+      })
+      .then(() => self.clients.claim()),
+  );
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.mode !== "navigate") {
+  const request = event.request;
+
+  if (request.method !== "GET") {
+    return;
+  }
+
+  const url = new URL(request.url);
+
+  if (url.pathname === OFFLINE_URL) {
+    event.respondWith(
+      caches.match(OFFLINE_URL).then((cachedResponse) => {
+        return cachedResponse || fetch(request);
+      }),
+    );
+
+    return;
+  }
+
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request).catch(() => {
+        return caches.match(OFFLINE_URL);
+      }),
+    );
+
     return;
   }
 
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match("/offline.html");
+    caches.match(request).then((cachedResponse) => {
+      return cachedResponse || fetch(request);
     }),
   );
 });
